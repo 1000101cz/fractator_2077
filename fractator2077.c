@@ -1,20 +1,17 @@
 /**********************************************
  * name:    FRACTATOR 2077                    *
- * author:  STEPAN MAROUSEK                   *
- * date:    05/16/2021                        *
+ * author:  S. MAROUSEK                       *
+ * date:    2021/6/6                          *
  **********************************************/
 
 /* EXECUTE OPTIONS
-*    /dev/ttyACM0   set serial port location   ( /dev/ttyACM0 by default )
 *    -r             set width resolution  (this options disables communication with Nucleo)
 *    -i             set height resolution (this options disables communication with Nucleo)
 *    -s             enable saving pc generated pictures to /tmp
 *
-* examples:  ./Fractator_2077 /dev/ttyACM1 -s      (specify serial link for Nucleo and save pc generated pictures)
+* examples:  ./Fractator_2077                      (default settings)
 *            ./Fractator_2077 -i -r -s             (change picture width and height and save pc generated pictures)
-*            ./Fractator_2077                      (default settings)
 *
-* - dont forget to call set_compute ('s' key) after start and after changing fractal specifications to send new data to Nucleo
 */
 
 #include <stdio.h>
@@ -53,13 +50,10 @@ void init_all_data(global_data * all_data)
 	all_data->min_imag = -1.1;
 	all_data->c_real = -0.81;
 	all_data->c_imag = 0.185;
-	all_data->real_chunk_size = 60;
-	all_data->imag_chunk_size = 60;
 	all_data->current_real = all_data->min_real;
 	all_data->current_imag = all_data->max_imag;
 	all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
 	all_data->step_imag = -(all_data->max_imag - all_data->min_imag) / all_data->height;
-	all_data->current_chunk_id = 0;
 	all_data->first_compute = true;
 	all_data->save_pictures = false;
 }
@@ -68,17 +62,12 @@ void welcome_message()
 {
 	green_col();
 	fprintf(stderr,
-		"FRACTATOR - seminar work\n  created by Marousek Stepan 'maroust1'\n  2021 05 16\n  Czech Technical University in Prague\n");
+		"FRACTATOR 2077 - seminar work\n  created by Marousek Stepan 'maroust1'\n  2021 06 06\n  Czech Technical University in Prague\n");
 	def_color();
 	fprintf(stderr, "*************************************************\n");
 	fprintf(stderr, "Controls:                                       *\n");
 	fprintf(stderr, "  basic:                                        *\n");
-	fprintf(stderr, "   s    send fractal specifications to Nucleo   *\n");
-	fprintf(stderr, "   1    start computation on Nucleo             *\n");
-	fprintf(stderr, "   a    abort computation on Nucleo             *\n");
-	fprintf(stderr, "   g    get Nucleo software version             *\n");
 	fprintf(stderr, "   c    compute fractal on computer             *\n");
-	fprintf(stderr, "   s    send fractal specifications to Nucleo   *\n");
 	fprintf(stderr, "   0    play animation                          *\n");
 	fprintf(stderr, "- - - - - - - - - - - - - - - - - - - - - - - - *\n");
 	fprintf(stderr, "  movement:                                     *\n");
