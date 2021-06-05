@@ -10,13 +10,13 @@
 #include <stdint.h>
 #include "global_data.h"
 
-double getT(int k, int number_of_iterations);
+float getT(int k, int number_of_iterations);
 
-uint8_t getR(double t);
+uint8_t getR(float t);
 
-uint8_t getG(double t);
+uint8_t getG(float t);
 
-uint8_t getB(double t);
+uint8_t getB(float t);
 
 void display_buffer(global_buffer * all_buffers, global_data * all_data);
 
