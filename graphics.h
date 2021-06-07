@@ -26,6 +26,10 @@ void close_window();
 
 void erase_buffer(global_buffer * all_buffers, global_data * all_data);
 
+int iter_function(int number_of_iterations, float real, float imag, double c_real, double c_imag);
+
+void compute_function(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
+
 void cpu_compute(global_buffer * all_buffers, global_data * all_data);
 
 #endif

@@ -26,16 +26,16 @@
 void animation(global_data * all_data, global_buffer * all_buffers)
 {
 
-	for (int i = 0; i < 96; i++) {
+	for (int i = 0; i < 960; i++) {
 		cpu_compute(all_buffers, all_data);
-		all_data->c_real = all_data->c_real + 0.01;
-		all_data->c_imag = all_data->c_imag + 0.01;
+		all_data->c_real = all_data->c_real + 0.001;
+		all_data->c_imag = all_data->c_imag + 0.001;
 	}
 	cpu_compute(all_buffers, all_data);
 
-	for (int i = 0; i < 64; i++) {
-		all_data->c_real = all_data->c_real - 0.015;
-		all_data->c_imag = all_data->c_imag - 0.015;
+	for (int i = 0; i < 640; i++) {
+		all_data->c_real = all_data->c_real - 0.0015;
+		all_data->c_imag = all_data->c_imag - 0.0015;
 		cpu_compute(all_buffers, all_data);
 	}
 	green_col();

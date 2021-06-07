@@ -7,7 +7,7 @@
 #ifndef __GLOBAL_DATA_H__
 #define __GLOBAL_DATA_H__
 
-#include <stdbool.h>
+
 #include <stdint.h>
 
 /* structure containing all fractal specifications */
@@ -32,10 +32,15 @@ typedef struct {
 	double current_imag;
 
 	int current_chunk_id;
-	bool first_compute;
+	_Bool first_compute;
 
-	bool nucleo_connected;
-	bool save_pictures;
+	_Bool nucleo_connected;
+	_Bool save_pictures;
+
+	_Bool thread1c;
+	_Bool thread2c;
+	_Bool thread3c;
+	_Bool thread4c;
 } global_data;
 
 /* structure containing picture buffers */

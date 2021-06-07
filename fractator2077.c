@@ -56,6 +56,10 @@ void init_all_data(global_data * all_data)
 	all_data->step_imag = -(all_data->max_imag - all_data->min_imag) / all_data->height;
 	all_data->first_compute = true;
 	all_data->save_pictures = false;
+	all_data->thread1c = 0;
+	all_data->thread2c = 0;
+	all_data->thread3c = 0;
+	all_data->thread4c = 0;
 }
 
 void welcome_message()

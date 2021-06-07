@@ -12,7 +12,7 @@
 
 // shared data structure
 typedef struct {
-	bool quit;  // exit threads and loops
+	_Bool quit;  // exit threads and loops
 	int fd;			// serial port file descriptor
 } data_t;
 

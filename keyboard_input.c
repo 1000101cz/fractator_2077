@@ -32,7 +32,7 @@ void keyboard_input(data_t * data, event * ev)
 
 		case 'q':	// quit
 			ev->type = EV_QUIT;
-			data->quit = true;
+			data->quit = 1;
 			break;
 
 		case 'a':	// abort
