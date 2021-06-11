@@ -9,9 +9,10 @@ EXECUTE OPTIONS
       -r             set width resolution
       -i             set height resolution
       -s             enable saving pc generated pictures to /tmp
+      -p             setup pixel prediction
 
-      examples: ./Fractator_2077                      (default settings)
-                ./Fractator_2077 -i -r -s             (change picture width and height and save pc generated pictures)
+      examples: ./Fractator_2077                        (default settings)
+                ./Fractator_2077 -i -r -s -p            (change picture width and height and save pc generated pictures)
 
 
 TIPS

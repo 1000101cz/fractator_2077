@@ -5,12 +5,13 @@
  **********************************************/
 
 /* EXECUTE OPTIONS
-*    -r             set width resolution  (this options disables communication with Nucleo)
-*    -i             set height resolution (this options disables communication with Nucleo)
+*    -r             set width resolution
+*    -i             set height resolution
 *    -s             enable saving pc generated pictures to /tmp
+*    -p             set pixel prediction
 *
 * examples:  ./Fractator_2077                      (default settings)
-*            ./Fractator_2077 -i -r -s             (change picture width and height and save pc generated pictures)
+*            ./Fractator_2077 -i -r -s -p          (change picture width and height and save pc generated pictures)
 *
 */
 
@@ -60,6 +61,7 @@ void init_all_data(global_data * all_data)
 	all_data->thread2c = 0;
 	all_data->thread3c = 0;
 	all_data->thread4c = 0;
+	all_data->prediction = 1;
 }
 
 void welcome_message()
@@ -114,7 +116,7 @@ int main(int argc, char *argv[])
 
 	int opt;
 
-	while ((opt = getopt(argc, argv, ":if:lcrsx")) != -1) {
+	while ((opt = getopt(argc, argv, ":if:lcrpsx")) != -1) {
 		switch (opt) {
 		case 'r':
 			printf("Enter x axis size: ");
@@ -129,6 +131,15 @@ int main(int argc, char *argv[])
 		case 's':
 			printf("Saving PC generated pictures enabled '/tmp'\n");
 			all_data.save_pictures = true;
+			break;
+
+		case 'p':
+			printf("Choose prediction precision [0/1/2]: ");
+			scanf("%d", &all_data.prediction);
+			if (!(all_data.prediction != 0 || all_data.prediction != 1 || all_data.prediction != 2)) {
+				fprintf(stderr,"ERROR:  invalid value!\n");
+				exit(1);
+			}
 			break;
 
 		case ':':

@@ -1,9 +1,6 @@
 1) use key '5' to save image
-2) multithread cpu_compute
 3) save image in .jpg/.png to save memory
-4) enable computing and saving pictures without rendering in SDL
 
 
 -----------------------------
  *speed up compute
- *direct save animation (.avi/.mp4)
