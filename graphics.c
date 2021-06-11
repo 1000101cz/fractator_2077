@@ -112,8 +112,6 @@ void compute_function(int cycle_start, int cycle_end, int local_width, int local
 {
 	int iter;	// this is going to save to iterations_buffer
 
-	int red,green,blue;
-
 	float real;
 	float imag;
 
@@ -122,10 +120,7 @@ void compute_function(int cycle_start, int cycle_end, int local_width, int local
 		imag = max_imag + (i/local_width)*step_imag;
 		iter = iter_function(number_of_iterations, real, imag, c_real, c_imag);
 		float t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(i*3, red, green, blue);
+		save_pixel(i*3, getR(t), getG(t), getB(t));
 	}
 }
 
@@ -135,8 +130,6 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 	int iter2;
 	int iter3;
 
-	int red,green,blue;
-
 	float real;
 	float imag;
 
@@ -144,10 +137,7 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 	imag = max_imag;
 	iter1 = iter_function(number_of_iterations, real, imag, c_real, c_imag);
 	float t = getT(iter1,number_of_iterations);
-	red = getR(t);
-	green = getG(t);
-	blue = getB(t);
-	save_pixel(0, red, green, blue);
+	save_pixel(0, getR(t), getG(t), getB(t));
 
 	for (int i = 1; i < local_width * local_height; i++) {
 		if ((i+1)%local_width == 0) {
@@ -156,10 +146,7 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 			imag = max_imag + (i/local_width)*step_imag;
 			iter2 = iter_function(number_of_iterations, real, imag, c_real, c_imag);
 			float t = getT(iter2,number_of_iterations);
-			red = getR(t);
-			green = getG(t);
-			blue = getB(t);
-			save_pixel(position, red, green, blue);
+			save_pixel(position, getR(t), getG(t), getB(t));
 		}
 		else {
 			int position = 3 * (i + 1);
@@ -167,17 +154,11 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 			imag = max_imag + ((i+1)/local_width)*step_imag;
 			iter3 = iter_function(number_of_iterations, real, imag, c_real, c_imag);
 			float t = getT(iter3,number_of_iterations);
-			red = getR(t);
-			green = getG(t);
-			blue = getB(t);
-			save_pixel(position, red, green, blue);
+			save_pixel(position, getR(t), getG(t), getB(t));
 
 			if (iter3 == iter1) {
 				int position = 3 * (i);
-				red = getR(t);
-				green = getG(t);
-				blue = getB(t);
-				save_pixel(position, red, green, blue);
+				save_pixel(position, getR(t), getG(t), getB(t));
 			}
 			else {
 				int position = 3 * i;
@@ -185,10 +166,7 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 				imag = max_imag + (i/local_width)*step_imag;
 				iter2 = iter_function(number_of_iterations, real, imag, c_real, c_imag);
 				float t = getT(iter2,number_of_iterations);
-				red = getR(t);
-				green = getG(t);
-				blue = getB(t);
-				save_pixel(position, red, green, blue);
+				save_pixel(position, getR(t), getG(t), getB(t));
 			}
 			i++;
 			iter1 = iter3;
@@ -217,7 +195,7 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 		imag = max_imag + ((i*5)/local_width)*(step_imag*5);
 
 		iter1 = iter_function(number_of_iterations, real, imag, c_real, c_imag);
-		position = 15 * i + (i/(local_width/5))*(3*4*local_width);
+		position = 15 * i + (i/(local_width/5))*(12*local_width);
 		t = getT(iter1,number_of_iterations);
 		red = getR(t);
 		green = getG(t);
@@ -227,7 +205,7 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 		save_pixel(position + 3*local_width, red, green, blue);
 
 		iter2 = iter_function(number_of_iterations, real+4*step_real, imag, c_real, c_imag);
-		position = 15 * i + (i/(local_width/5))*(3*4*local_width) + 3 * 4;
+		position = 15 * i + (i/(local_width/5))*(12*local_width) + 12;
 		t = getT(iter2,number_of_iterations);
 		red = getR(t);
 		green = getG(t);
@@ -237,7 +215,7 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 		save_pixel(position + 3*local_width, red, green, blue);
 
 		iter3 = iter_function(number_of_iterations+4*step_imag, real, imag, c_real, c_imag);
-		position = 15 * i + (i/(local_width/5))*(3*4*local_width) + 3 * 4 * local_width;
+		position = 15 * i + (i/(local_width/5))*(12*local_width) + 12 * local_width;
 		t = getT(iter3,number_of_iterations);
 		red = getR(t);
 		green = getG(t);
@@ -247,7 +225,7 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 		save_pixel(position - 3*local_width, red, green, blue);
 
 		iter4 = iter_function(number_of_iterations+4*step_imag, real+4*step_real, imag, c_real, c_imag);
-		position = 15 * i + (i/(local_width/5))*(3*4*local_width) + 3 * 4 * local_width + 3 * 4;
+		position = 15 * i + (i/(local_width/5))*(12*local_width) + 12 * local_width + 12;
 		t = getT(iter4,number_of_iterations);
 		red = getR(t);
 		green = getG(t);
@@ -257,7 +235,7 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 		save_pixel(position - 3*local_width, red, green, blue);
 
 		iter5 = iter_function(number_of_iterations, real+2*step_real, imag+2*step_imag, c_real, c_imag);
-		position = 15 * i + (i/(local_width/5))*(3*4*local_width) + 3 * 2 * local_width + 3 * 2;
+		position = 15 * i + (i/(local_width/5))*(12*local_width) + 6 * local_width + 6;
 		t = getT(iter5,number_of_iterations);
 		red = getR(t);
 		green = getG(t);
@@ -272,59 +250,35 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 		// + pixels between
 		int iter = (iter2 + iter4 + iter5)/3;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position + 6, red, green, blue);
+		save_pixel(position + 6, getR(t), getG(t), getB(t));
 
 		iter = (iter1 + iter3 + iter5)/3;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position - 6, red, green, blue);
+		save_pixel(position - 6, getR(t), getG(t), getB(t));
 
 		iter = (iter1 + iter2 + iter5)/3;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position - 3*2*local_width, red, green, blue);
+		save_pixel(position - 6*local_width, getR(t), getG(t), getB(t));
 
 		iter = (iter3 + iter4 + iter5)/3;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position + 3*2*local_width, red, green, blue);
+		save_pixel(position + 6*local_width, getR(t), getG(t), getB(t));
 
 		iter = (iter1 + iter5)/2;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position - 3*local_width - 3, red, green, blue);
+		save_pixel(position - 3*local_width - 3, getR(t), getG(t), getB(t));
 
 		iter = (iter2 + iter5)/2;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position - 3*local_width + 3, red, green, blue);
+		save_pixel(position - 3*local_width + 3, getR(t), getG(t), getB(t));
 
 		iter = (iter3 + iter5)/2;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position + 3*local_width - 3, red, green, blue);
+		save_pixel(position + 3*local_width - 3, getR(t), getG(t), getB(t));
 
 		iter = (iter4 + iter5)/2;
 		t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		save_pixel(position + 3*local_width + 3, red, green, blue);
+		save_pixel(position + 3*local_width + 3, getR(t), getG(t), getB(t));
 	}
 }
 
