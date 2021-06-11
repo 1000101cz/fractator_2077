@@ -12,7 +12,7 @@ EXECUTE OPTIONS
       -p             setup pixel prediction
 
       examples: ./Fractator_2077                        (default settings)
-                ./Fractator_2077 -i -r -s -p            (change picture width and height and save pc generated pictures)
+                ./Fractator_2077 -i -r -s -p            (change picture width, height, prediction settings and save pc generated pictures)
 
 
 TIPS
