@@ -2,6 +2,8 @@
 
 *Created by Stepan Marousek (maroust1) | 2021/05/16*
 
+![alt text](https://github.com/1000101cz/fractator_2077/blob/main/icon.jpg?raw=true)
+
 <h2>Prerequisites (Debian)</h2>
 
 *    libsdl2-dev
