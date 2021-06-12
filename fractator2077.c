@@ -36,9 +36,13 @@
 #define MESSAGE_SIZE (sizeof(message))
 #define SERIAL_READ_TIMOUT_MS 500	//timeout for reading from serial port 500
 
+_Bool end_thr = 0;
+
 void call_termios(int reset);
 
 void *input_thread(void *);
+
+void *sdl_thread(void *);
 
 void init_all_data(global_data * all_data)
 {
@@ -135,14 +139,14 @@ int main(int argc, char *argv[])
 			break;
 
 		case 'p':
-			printf("Choose prediction precision [(0-5) / 10]: ");
+			printf("Choose prediction precision [(0-5) / (10-13)]: ");
 			scanf("%d", &all_data.prediction);
-			if (!(all_data.prediction == 0 || all_data.prediction == 1 || all_data.prediction == 2 || all_data.prediction == 3 || all_data.prediction == 4 || all_data.prediction == 5 || all_data.prediction == 10)) {
+			if (!(all_data.prediction == 0 || all_data.prediction == 1 || all_data.prediction == 2 || all_data.prediction == 3 || all_data.prediction == 4 || all_data.prediction == 5 || all_data.prediction == 10 || all_data.prediction == 11 || all_data.prediction == 12 || all_data.prediction == 13)) {
 				red_col();
 				fprintf(stderr,"ERROR: Invalid value!\n");
 				all_data.prediction = 1;
 			}
-			if (all_data.prediction == 10) {
+			if (all_data.prediction == 10 || all_data.prediction == 11 || all_data.prediction == 12 || all_data.prediction == 13) {
 				printf("Choose distance between pixels: ");
 				scanf("%d", &all_data.prediction_10_steps);
 				if (all_data.prediction_10_steps < 1) {
@@ -178,9 +182,9 @@ int main(int argc, char *argv[])
 	all_buffers.iterations_buffer = malloc(sizeof(int) * all_data.width * all_data.height);
 	all_buffers.picture_buffer = malloc(3 * sizeof(int) * all_data.width * all_data.height);
 
-	enum { INPUT, NUM_THREADS };
-	const char *threads_names[] = { "Input", "Serial In" };
-	void *(*thr_functions[])(void *) = { input_thread };
+	enum { INPUT, SDLTHRD, NUM_THREADS };
+	const char *threads_names[] = { "Input", "SDL" };
+	void *(*thr_functions[])(void *) = { input_thread, sdl_thread };
 	pthread_t threads[NUM_THREADS];
 
 	create_window(&all_data);
@@ -215,9 +219,11 @@ int main(int argc, char *argv[])
 	}
 
 	/* terminate all threads and exit code */
+	end_thr = 1;
 	for (int i = 0; i < NUM_THREADS; ++i) {
 		def_color();
 		fprintf(stderr, "INFO:  Call join to the thread %s\n", threads_names[i]);
+		pthread_cancel(threads[i]);
 		int r = pthread_join(threads[i], NULL);
 		def_color();
 		fprintf(stderr, "INFO:  Joining the thread %s has been %s\n",
@@ -255,5 +261,16 @@ void *input_thread(void *d)
 	fprintf(stderr, "INFO:  Exit input thead %p\n", (void *)pthread_self());
 	return NULL;
 }
+
+/* thread handeling input */
+void *sdl_thread(void *d)
+{
+	while(!end_thr) {
+		xwin_poll_events();
+		sleep(0.001);
+	}
+	return NULL;
+}
+
 
 /* end of fractator sem */

@@ -18,7 +18,7 @@
 
 global_data local_all_data;
 global_buffer local_all_buffers;
-uint8_t prediction_10_status = 0;
+int prediction_10_status = 0;
 
 float getT(int k, int number_of_iterations)
 {
@@ -134,6 +134,80 @@ void compute_function_predict_10(int cycle_start, int cycle_end, int local_width
 	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
 }
 
+void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+{
+	int iter;	// this is going to save to iterations_buffer
+	for (int i = 0; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		save_pixel(i*3, getR(t), getG(t), getB(t));
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
+}
+
+void compute_function_predict_12(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+{
+	int iter;	// this is going to save to iterations_buffer
+	uint8_t red, green, blue;
+	int previous = -1;
+	for (int i = 0; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		red = getR(t);
+		green = getG(t);
+		blue = getB(t);
+		int i3 = i*3;
+		save_pixel(i3, red, green, blue);
+		if (previous == iter) {
+			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
+				save_pixel(i3-3*j, red, green, blue);
+			}
+		} else if (i != 0){
+			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
+				save_pixel(i3-3*j, 0, 0, 0);
+			}
+		}
+		previous = iter;
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
+}
+
+void compute_function_predict_13(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+{
+	int iter;	// this is going to save to iterations_buffer
+	uint8_t red, green, blue;
+	int previous = -1;
+	for (int i = 0; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		red = getR(t);
+		green = getG(t);
+		blue = getB(t);
+		int i3 = i*3;
+		save_pixel(i3, red, green, blue);
+		if (previous == iter) {
+			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
+				save_pixel(i3-3*j, red, green, blue);
+			}
+			previous = iter;
+		} else if (i != 0){
+			previous = iter;
+			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
+				iter = iter_function(number_of_iterations, min_real + ((i-j)%local_width)*step_real, max_imag + ((i-j)/local_width)*step_imag, c_real, c_imag);
+				float t = getT(iter,number_of_iterations);
+				red = getR(t);
+				green = getG(t);
+				blue = getB(t);
+				save_pixel(i3-3*j, red, green, blue);
+			}
+		}	
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
+}
+
 void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 {
 	local_all_data.width = all_data->width;
@@ -163,6 +237,12 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		compute_function_predict_5(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
 	} else if (all_data->prediction == 10) {
 		compute_function_predict_10(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+	} else if (all_data->prediction == 11) {
+		compute_function_predict_11(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+	} else if (all_data->prediction == 12) {
+		compute_function_predict_12(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+	} else if (all_data->prediction == 13) {
+		compute_function_predict_13(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
 	}
 
 	xwin_redraw(all_data->width, all_data->height,
