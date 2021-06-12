@@ -4,38 +4,38 @@
 
 <h2>Prerequisites (Debian)</h2>
 
-**-libsdl2-dev**
+*    libsdl2-dev
 
-**-libsdl2-image-2.0-0**
+*    libsdl2-image-2.0-0
 
-**-libsdl2-image-dev**
+*    libsdl2-image-dev
 
 <h2>Run code:</h2>
-Type
 
-`./Fractator_2077`
-
-in terminal.
+Type `./Fractator_2077` in terminal.
 
 You can use these execute options:
 
-*      -r             set width resolution
+*      r - set width resolution
 
-*      -i             set height resolution
+*      i - set height resolution
 
-*      -s             enable saving pc generated pictures to /tmp
+*      s - enable saving pc generated pictures to /tmp
 
-*      -p             setup pixel prediction
+*      p - setup pixel prediction
 
 Examples:
 
-`./Fractator_2077`                        (default settings)
+*    `./Fractator_2077` - (default settings)
 
-`./Fractator_2077 -i -r -s -p`            (change picture width, height, prediction settings and save pc generated pictures)
+*    `./Fractator_2077 -r -i -s -p` - (change picture width, height, prediction settings and save generated pictures)
 
 
 <h2>Tips:</h2>
-when zooming in to much, displayed picture is corrupted due to *double* data type accuracy
+
+*    when zooming in to much, displayed picture is corrupted due to *double* data type accuracy
+
+*    for smooth animation, dont set the distance between pixels (in prediction 10) on higher value than 15
 
 
 
