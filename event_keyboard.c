@@ -38,6 +38,11 @@ void animation(global_data * all_data, global_buffer * all_buffers)
 		all_data->c_imag = all_data->c_imag - 0.001953125;
 		cpu_compute(all_buffers, all_data);
 	}
+	if (all_data->prediction == 10) {
+		for (int i = 0; i < all_data->prediction_10_steps; i++) {
+			cpu_compute(all_buffers, all_data);
+		}
+	}
 	green_col();
 	fprintf(stderr,"\nINFO: Animation ended\n");
 }
@@ -70,6 +75,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 
 	case EV_COMPUTE_CPU: // compute fractal on pc
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		green_col();
 		fprintf(stderr, "INFO:  PC computation done\n");
 		break;
@@ -103,6 +113,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 
 			xwin_resize(all_data, all_buffers->picture_buffer);
 			cpu_compute(all_buffers, all_data);
+			if (all_data->prediction == 10) {
+				for (int i = 1; i < all_data->prediction_10_steps; i++){
+					cpu_compute(all_buffers, all_data);
+				}
+			}
 
 		} else if (all_data->width == 480) {	// change step
 			all_data->width = 660;
@@ -119,6 +134,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 			// close window and create bigger one
 			xwin_resize(all_data, all_buffers->picture_buffer);
 			cpu_compute(all_buffers, all_data);
+			if (all_data->prediction == 10) {
+				for (int i = 1; i < all_data->prediction_10_steps; i++){
+					cpu_compute(all_buffers, all_data);
+				}
+			}
 
 		} else {
 			yellow_col();
@@ -143,6 +163,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 			// close window and create bigger one
 			xwin_resize(all_data, all_buffers->picture_buffer);
 			cpu_compute(all_buffers, all_data);
+			if (all_data->prediction == 10) {
+				for (int i = 1; i < all_data->prediction_10_steps; i++){
+					cpu_compute(all_buffers, all_data);
+				}
+			}
 
 		} else if (all_data->width == 660) {
 			all_data->width = 480;
@@ -159,6 +184,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 			// close window and create bigger one
 			xwin_resize(all_data, all_buffers->picture_buffer);
 			cpu_compute(all_buffers, all_data);
+			if (all_data->prediction == 10) {
+				for (int i = 1; i < all_data->prediction_10_steps; i++){
+					cpu_compute(all_buffers, all_data);
+				}
+			}
 		} else {
 			yellow_col();
 			fprintf(stderr,
@@ -172,6 +202,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_MOVE_DOWN: // move picture
@@ -180,6 +215,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_MOVE_LEFT: // move picture
@@ -188,6 +228,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_MOVE_RIGHT: // move picture
@@ -196,22 +241,42 @@ void event_keyboard_ev(event * ev, data_t * data,
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_INCREASE_ITER: // increase number of iterations
 		all_data->number_of_iterations = all_data->number_of_iterations + 5;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_DECREASE_ITER: // decrease number of iterations
 		all_data->number_of_iterations = all_data->number_of_iterations - 5;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_CHANGE_1: // increase c value
 		all_data->c_real = all_data->c_real + 0.025;
 		all_data->c_imag = all_data->c_imag + 0.035;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_CHANGE_2: // zoom out
@@ -224,12 +289,22 @@ void event_keyboard_ev(event * ev, data_t * data,
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_CHANGE_3: // decrease c value
 		all_data->c_real = all_data->c_real - 0.025;
 		all_data->c_imag = all_data->c_imag - 0.035;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_CHANGE_4: // zoom in
@@ -242,6 +317,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
+			}
+		}
 		break;
 
 	case EV_ANIMATION: // start animation

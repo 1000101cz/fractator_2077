@@ -49,8 +49,8 @@ void init_all_data(global_data * all_data)
 	all_data->min_real = -1.6;
 	all_data->max_imag = 1.1;
 	all_data->min_imag = -1.1;
-	all_data->c_real = -0.81;
-	all_data->c_imag = 0.185;
+	all_data->c_real = -0.66;
+	all_data->c_imag = 0.385;
 	all_data->current_real = all_data->min_real;
 	all_data->current_imag = all_data->max_imag;
 	all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
@@ -62,6 +62,7 @@ void init_all_data(global_data * all_data)
 	all_data->thread3c = 0;
 	all_data->thread4c = 0;
 	all_data->prediction = 1;
+	all_data->prediction_10_steps = 9;
 }
 
 void welcome_message()
@@ -134,11 +135,21 @@ int main(int argc, char *argv[])
 			break;
 
 		case 'p':
-			printf("Choose prediction precision [0/1/2]: ");
+			printf("Choose prediction precision [(0-5) / 10]: ");
 			scanf("%d", &all_data.prediction);
-			if (!(all_data.prediction != 0 || all_data.prediction != 1 || all_data.prediction != 2 || all_data.prediction != 3 || all_data.prediction != 4 || all_data.prediction != 5)) {
-				fprintf(stderr,"ERROR:  invalid value!\n");
-				exit(1);
+			if (!(all_data.prediction == 0 || all_data.prediction == 1 || all_data.prediction == 2 || all_data.prediction == 3 || all_data.prediction == 4 || all_data.prediction == 5 || all_data.prediction == 10)) {
+				red_col();
+				fprintf(stderr,"ERROR: Invalid value!\n");
+				all_data.prediction = 1;
+			}
+			if (all_data.prediction == 10) {
+				printf("Choose distance between pixels: ");
+				scanf("%d", &all_data.prediction_10_steps);
+				if (all_data.prediction_10_steps < 1) {
+					red_col();
+					fprintf(stderr,"ERROR: Invalid value!\n");
+					all_data.prediction_10_steps = 1;
+				}
 			}
 			break;
 

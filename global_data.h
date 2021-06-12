@@ -43,6 +43,8 @@ typedef struct {
 	_Bool thread4c;
 
 	int prediction;
+
+	int prediction_10_steps;
 } global_data;
 
 /* structure containing picture buffers */
