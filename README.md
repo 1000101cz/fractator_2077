@@ -2,7 +2,7 @@
 
 *Created by S. Marousek (maroust1) | 2021/06/12*
 
-![alt text](https://github.com/1000101cz/fractator_2077/blob/main/predict_1.png?raw=true "example")
+![alt text](https://github.com/1000101cz/fractator_2077/blob/main/data/predict_1.png?raw=true "example")
 
 <h2>Prerequisites (Debian)</h2>
 
