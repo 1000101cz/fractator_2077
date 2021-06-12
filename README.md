@@ -39,4 +39,4 @@ when zooming in to much, displayed picture is corrupted due to *double* data typ
 
 
 
-tested on :computer: Debian, Ubuntu, Fedora, Manjaro, Raspbian, Android | (x86_64 and ARM)    |   written in :atom: Atom 
+tested on :computer: Debian, Ubuntu, Fedora, Manjaro, Raspbian | (x86_64 and ARM)    |   written in :atom: Atom 
