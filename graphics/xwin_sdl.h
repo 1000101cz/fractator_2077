@@ -7,7 +7,7 @@
 #ifndef __XWIN_SDL_H__
 #define __XWIN_SDL_H__
 
-#include "global_data.h"
+#include "../data/global_data.h"
 
 int xwin_init(int w, int h);
 void xwin_close();

@@ -17,10 +17,10 @@
 
 #include "event_queue.h"
 #include "event_keyboard.h"
-#include "terminal_colors.h"
-#include "global_data.h"
-#include "graphics.h"
-#include "xwin_sdl.h"
+#include "../system/terminal_colors.h"
+#include "../data/global_data.h"
+#include "../graphics/graphics.h"
+#include "../graphics/xwin_sdl.h"
 
 /* start animation */
 void animation(global_data * all_data, global_buffer * all_buffers)

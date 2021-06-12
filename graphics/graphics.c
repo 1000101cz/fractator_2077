@@ -6,8 +6,8 @@
 
 #include "graphics.h"
 #include "prediction.h"
-#include "global_data.h"
-#include "terminal_colors.h"
+#include "../data/global_data.h"
+#include "../system/terminal_colors.h"
 #include "xwin_sdl.h"
 #include <stdint.h>
 #include <stdio.h>

@@ -25,13 +25,13 @@
 #include <math.h>
 #include <pthread.h>
 
-#include "event_queue.h"
-#include "event_keyboard.h"
-#include "terminal_colors.h"
-#include "keyboard_input.h"
-#include "global_data.h"
-#include "graphics.h"
-#include "xwin_sdl.h"
+#include "events/event_queue.h"
+#include "events/event_keyboard.h"
+#include "system/terminal_colors.h"
+#include "events/keyboard_input.h"
+#include "data/global_data.h"
+#include "graphics/graphics.h"
+#include "graphics/xwin_sdl.h"
 
 #define MESSAGE_SIZE (sizeof(message))
 #define SERIAL_READ_TIMOUT_MS 500	//timeout for reading from serial port 500

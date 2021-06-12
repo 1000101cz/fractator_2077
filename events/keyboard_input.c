@@ -10,7 +10,7 @@
 #include "event_queue.h"
 #include "event_keyboard.h"
 #include "keyboard_input.h"
-#include "terminal_colors.h"
+#include "../system/terminal_colors.h"
 
 pthread_mutex_t mtx;
 pthread_cond_t cond;

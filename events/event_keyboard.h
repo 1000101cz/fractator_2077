@@ -8,7 +8,7 @@
 #define __EVENT_KEYBOARD_H__
 
 #include "event_queue.h"
-#include "global_data.h"
+#include "../data/global_data.h"
 
 // shared data structure
 typedef struct {

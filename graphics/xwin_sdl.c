@@ -16,7 +16,7 @@
 #include <SDL_image.h>
 
 #include "xwin_sdl.h"
-#include "global_data.h"
+#include "../data/global_data.h"
 
 static SDL_Window *win = NULL;
 

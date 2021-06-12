@@ -8,7 +8,7 @@
 #define __GRAPHICS_H__
 
 #include <stdint.h>
-#include "global_data.h"
+#include "../data/global_data.h"
 
 float getT(int k, int number_of_iterations);
 
