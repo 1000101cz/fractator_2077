@@ -36,6 +36,12 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 
 void compute_function_predict_2(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
 
+void compute_function_predict_3(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
+
+void compute_function_predict_4(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
+
+void compute_function_predict_5(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
+
 void cpu_compute(global_buffer * all_buffers, global_data * all_data);
 
 #endif

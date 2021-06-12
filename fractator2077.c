@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
 		case 'p':
 			printf("Choose prediction precision [0/1/2]: ");
 			scanf("%d", &all_data.prediction);
-			if (!(all_data.prediction != 0 || all_data.prediction != 1 || all_data.prediction != 2)) {
+			if (!(all_data.prediction != 0 || all_data.prediction != 1 || all_data.prediction != 2 || all_data.prediction != 3 || all_data.prediction != 4 || all_data.prediction != 5)) {
 				fprintf(stderr,"ERROR:  invalid value!\n");
 				exit(1);
 			}

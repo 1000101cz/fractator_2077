@@ -20,4 +20,3 @@ ${OBJS}: %.o: %.c
 
 clean:
 	rm -f ${BINARIES} ${OBJS}
-	rm -f ${HW}-brute.zip

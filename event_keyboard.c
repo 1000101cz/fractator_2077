@@ -28,14 +28,14 @@ void animation(global_data * all_data, global_buffer * all_buffers)
 
 	for (int i = 0; i < 960; i++) {
 		cpu_compute(all_buffers, all_data);
-		all_data->c_real = all_data->c_real + 0.001;
-		all_data->c_imag = all_data->c_imag + 0.001;
+		all_data->c_real = all_data->c_real + 0.0009765625;
+		all_data->c_imag = all_data->c_imag + 0.0009765625;
 	}
 	cpu_compute(all_buffers, all_data);
 
-	for (int i = 0; i < 640; i++) {
-		all_data->c_real = all_data->c_real - 0.0015;
-		all_data->c_imag = all_data->c_imag - 0.0015;
+	for (int i = 0; i < 480; i++) {
+		all_data->c_real = all_data->c_real - 0.001953125;
+		all_data->c_imag = all_data->c_imag - 0.001953125;
 		cpu_compute(all_buffers, all_data);
 	}
 	green_col();
