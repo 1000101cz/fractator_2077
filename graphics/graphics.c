@@ -9,6 +9,7 @@
 #include "../data/global_data.h"
 #include "../system/terminal_colors.h"
 #include "xwin_sdl.h"
+#include "buttons.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <math.h>
@@ -19,6 +20,33 @@
 global_data local_all_data;
 global_buffer local_all_buffers;
 int prediction_10_status = 0;
+
+uint8_t getButton(int buttor_number, int position, int subpixel, int menuPosition)
+{
+	uint8_t outputPixel = 255;
+	switch (buttor_number){
+		case 1:
+			outputPixel = buttonOne(3*position+subpixel, menuPosition);
+			break;
+
+		case 2:
+			outputPixel = buttonTwo(3*position+subpixel, menuPosition);
+			break;
+
+		case 3:
+			outputPixel = buttonThree(3*position+subpixel, menuPosition);
+			break;
+
+		case 4:
+			outputPixel = buttonFour(3*position+subpixel, menuPosition);
+			break;
+
+		case 5:
+			outputPixel = buttonFive(3*position+subpixel, menuPosition);
+			break;
+	}
+	return outputPixel;
+}
 
 float getT(int k, int number_of_iterations)
 {
@@ -245,10 +273,8 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		compute_function_predict_13(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
 	}
 
-	xwin_redraw(all_data->width, all_data->height,
-		    local_all_buffers.picture_buffer);
 	if (all_data->save_pictures) {
-		
+
 				/* Save without SDL */
 				char filenameppm[40];
 				snprintf(filenameppm, 40, "fractal-%d.ppm",all_data->animation_frame);
@@ -261,6 +287,35 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 				fclose(pictureOutput);
 				all_data->animation_frame++;
 	}
+
+	for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
+		local_all_buffers.picture_buffer[i] = 255;
+		local_all_buffers.picture_buffer[i+1] = 255;
+		local_all_buffers.picture_buffer[i+2] = 255;
+	}
+	for (int i = 0; i < 5000; i++) {
+		int commonIndex = 3*(all_data->width*all_data->height) + ((i%100)*3 + (i/100)*all_data->width*3);
+		local_all_buffers.picture_buffer[commonIndex] = getButton(1,i,0,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+1] = getButton(1,i,1,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+2] = getButton(1,i,2,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+300] = getButton(2,i,0,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+301] = getButton(2,i,1,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+302] = getButton(2,i,2,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+600] = getButton(3,i,0,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+601] = getButton(3,i,1,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+602] = getButton(3,i,2,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+900] = getButton(4,i,0,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+901] = getButton(4,i,1,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+902] = getButton(4,i,2,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+1200] = getButton(5,i,0,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+1201] = getButton(5,i,1,all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex+1202] = getButton(5,i,2,all_data->menuPosition);
+	}
+	all_data->menuPosition++;
+	all_data->menuPosition = all_data->menuPosition % 11;
+	xwin_redraw(all_data->width, all_data->height,
+		    local_all_buffers.picture_buffer);
+
 	/*def_color();
 	fprintf(stderr,"\nCurrent fractal settings:\n  Number of iterations: %d\n  Real: %5f   %5f\n  Imag: %5f  %5f\n  C:    %5f   %5f\n",
 	     all_data->number_of_iterations, all_data->min_real,

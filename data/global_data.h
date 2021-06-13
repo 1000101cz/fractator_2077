@@ -46,6 +46,8 @@ typedef struct {
 	int prediction_10_steps;
 
 	int animation_frame;
+
+	int menuPosition;
 } global_data;
 
 /* structure containing picture buffers */

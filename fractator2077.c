@@ -68,6 +68,7 @@ void init_all_data(global_data * all_data)
 	all_data->prediction = 1;
 	all_data->prediction_10_steps = 9;
 	all_data->animation_frame = 1;
+	all_data->menuPosition = 0;
 }
 
 void welcome_message()

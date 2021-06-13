@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include "../data/global_data.h"
 
+uint8_t getButton(int buttor_number, int position, int subpixel, int menuPosition);
+
 float getT(int k, int number_of_iterations);
 
 uint8_t getR(float t);
