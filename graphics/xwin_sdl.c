@@ -203,18 +203,7 @@ void xwin_resize(global_data * all_data, unsigned char *img)
 /* save window to png image */
 void xwin_save_image(unsigned char *img)
 {
-	assert(img && win);
-	SDL_Surface *scr = SDL_GetWindowSurface(win);
-
-	char filename[40];
-	struct tm *timenow;
-
-	time_t now = time(NULL);
-	timenow = gmtime(&now);
-
-	strftime(filename, sizeof(filename), "/tmp/fractal_%Y%m%d%H%M%S.png", timenow);
-
-	SDL_SaveBMP(scr, filename);	// SDL_SaveBMP
+	// zbytecne
 }
 
 /* end of xwin_sdl.c */

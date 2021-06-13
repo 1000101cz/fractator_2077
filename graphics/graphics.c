@@ -202,7 +202,7 @@ void compute_function_predict_13(int cycle_start, int cycle_end, int local_width
 				blue = getB(t);
 				save_pixel(i3-3*j, red, green, blue);
 			}
-		}	
+		}
 	}
 	prediction_10_status++;
 	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
@@ -248,17 +248,18 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 	xwin_redraw(all_data->width, all_data->height,
 		    local_all_buffers.picture_buffer);
 	if (all_data->save_pictures) {
-			def_color();
-			fprintf(stderr,"\nINFO:  Saving picture to /tmp ...\n");
-			xwin_save_image(all_buffers->picture_buffer);	// Save image
-			char filename[40];
-			struct tm *timenow;
+		
+				/* Save without SDL */
+				char filenameppm[40];
+				snprintf(filenameppm, 40, "fractal-%d.ppm",all_data->animation_frame);
 
-			time_t now = time(NULL);
-			timenow = gmtime(&now);
-			strftime(filename, sizeof(filename), "/tmp/fractal_%Y%m%d%H%M%S.png", timenow);
-			green_col();
-			fprintf(stderr,"INFO:  Picture saved in %s\n",filename);
+				FILE *pictureOutput;
+				pictureOutput = fopen(filenameppm,"w");
+
+				fprintf(pictureOutput,"P6\n%d %d\n255\n",all_data->width,all_data->height);
+				fwrite(local_all_buffers.picture_buffer, sizeof(uint8_t), all_data->width*all_data->height*3, pictureOutput);
+				fclose(pictureOutput);
+				all_data->animation_frame++;
 	}
 	/*def_color();
 	fprintf(stderr,"\nCurrent fractal settings:\n  Number of iterations: %d\n  Real: %5f   %5f\n  Imag: %5f  %5f\n  C:    %5f   %5f\n",

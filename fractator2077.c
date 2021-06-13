@@ -67,6 +67,7 @@ void init_all_data(global_data * all_data)
 	all_data->thread4c = 0;
 	all_data->prediction = 1;
 	all_data->prediction_10_steps = 9;
+	all_data->animation_frame = 1;
 }
 
 void welcome_message()
