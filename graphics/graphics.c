@@ -288,7 +288,7 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 				all_data->animation_frame++;
 	}
 
-	for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
+	/*for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
 		local_all_buffers.picture_buffer[i] = 255;
 		local_all_buffers.picture_buffer[i+1] = 255;
 		local_all_buffers.picture_buffer[i+2] = 255;
@@ -310,7 +310,7 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		local_all_buffers.picture_buffer[commonIndex+1200] = getButton(5,i,0,all_data->menuPosition);
 		local_all_buffers.picture_buffer[commonIndex+1201] = getButton(5,i,1,all_data->menuPosition);
 		local_all_buffers.picture_buffer[commonIndex+1202] = getButton(5,i,2,all_data->menuPosition);
-	}
+	}*/
 	//all_data->menuPosition++;
 	//all_data->menuPosition = all_data->menuPosition % 11;
 	xwin_redraw(all_data->width, all_data->height,

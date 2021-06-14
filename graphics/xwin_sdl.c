@@ -176,7 +176,7 @@ void xwin_redraw(int w, int h, unsigned char *img)
 {
 	assert(img && win);
 	SDL_Surface *scr = SDL_GetWindowSurface(win);
-	for (int y = 0; y < (scr->h+50); ++y) {
+	for (int y = 0; y < (scr->h); ++y) {  // h + 50
 		for (int x = 0; x < scr->w; ++x) {
 			const int idx = (y * scr->w + x) * scr->format->BytesPerPixel;
 			Uint8 *px = (Uint8 *) scr->pixels + idx;
