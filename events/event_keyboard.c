@@ -22,11 +22,57 @@
 #include "../graphics/graphics.h"
 #include "../graphics/xwin_sdl.h"
 
+void *music_thread(void *);
+
 /* start animation */
 void animation(global_data * all_data, global_buffer * all_buffers)
 {
+	 //////////////////////////////
 
-	for (int i = 0; i < 960; i++) {
+	def_color();
+ 	fprintf(stderr,"\nINFO: Audio animation started\n");
+	data_t data = {.quit = false,.fd = -1, };
+
+	enum { MUSIC, NUM_THREADS_TWO };
+	void *(*thr_functions[])(void *) = { music_thread};
+	pthread_t threads[NUM_THREADS_TWO];
+
+	pthread_create(&threads[0], NULL, thr_functions[0], &data);
+
+	FILE *audioIn;
+	audioIn = fopen("audioAnimation.wav","r");
+	int element;
+	for (int i = 0; i < 50; i++) {
+		element = fgetc(audioIn);
+	}
+	int element1, element2;
+	element1 = fgetc(audioIn);
+	element2 = fgetc(audioIn);
+	while ((element != EOF) && (element1 != EOF) && (element2 != EOF)) {
+		element = 1;
+		for (int i = 0; (i < 44100/30) && (element1 != EOF) && (element2 != EOF); i++) {
+			element1 = fgetc(audioIn);
+			element2 = fgetc(audioIn);
+			element = (element + (element1 + element2)/2)/2;
+		}
+		if (element1 == EOF || element2 == EOF) {
+			break;
+		}
+		usleep(9866);
+		all_data->number_of_iterations = 5 + element*1.15686;
+		all_data->c_real = -1.235 + element*0.00421568627;
+		all_data->c_imag = 1.085 - element*0.00590196;
+		cpu_compute(all_buffers, all_data);
+	}
+	pthread_cancel(threads[0]);
+	fclose(audioIn);
+
+	green_col();
+	fprintf(stderr,"\nINFO: Animation ended\n");
+
+	///////////////////
+
+	/*for (int i = 0; i < 960; i++) {
 		cpu_compute(all_buffers, all_data);
 		all_data->c_real = all_data->c_real + 0.0009765625;
 		all_data->c_imag = all_data->c_imag + 0.0009765625;
@@ -44,7 +90,7 @@ void animation(global_data * all_data, global_buffer * all_buffers)
 		}
 	}
 	green_col();
-	fprintf(stderr,"\nINFO: Animation ended\n");
+	fprintf(stderr,"\nINFO: Animation ended\n");*/
 }
 
 /* handle keyboard events */
@@ -331,4 +377,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 	default:
 		break;
 	}
+}
+
+/* thread handeling input */
+void *music_thread(void *d)
+{
+	system("play audioAnimation.wav");
+	return NULL;
 }

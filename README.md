@@ -12,6 +12,8 @@
 
 *    libsdl2-image-dev
 
+*    sox
+
 <h2>Run code:</h2>
 
 Type `./Fractator_2077` in terminal.
@@ -42,4 +44,4 @@ Examples:
 
 
 
-tested on :computer: Debian, Ubuntu, Fedora, Manjaro, Raspbian | (x86_64 and ARM)    |   written in :atom: Atom 
+tested on :computer: Debian, Ubuntu, Fedora, Manjaro, Raspbian | (x86_64 and ARM)    |   written in :atom: Atom

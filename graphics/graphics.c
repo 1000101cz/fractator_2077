@@ -311,8 +311,8 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		local_all_buffers.picture_buffer[commonIndex+1201] = getButton(5,i,1,all_data->menuPosition);
 		local_all_buffers.picture_buffer[commonIndex+1202] = getButton(5,i,2,all_data->menuPosition);
 	}
-	all_data->menuPosition++;
-	all_data->menuPosition = all_data->menuPosition % 11;
+	//all_data->menuPosition++;
+	//all_data->menuPosition = all_data->menuPosition % 11;
 	xwin_redraw(all_data->width, all_data->height,
 		    local_all_buffers.picture_buffer);
 
