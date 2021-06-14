@@ -14,6 +14,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <pthread.h>
+#include <time.h>
+#include <inttypes.h>
+#include <math.h>
 
 #include "event_queue.h"
 #include "event_keyboard.h"
@@ -22,75 +25,100 @@
 #include "../graphics/graphics.h"
 #include "../graphics/xwin_sdl.h"
 
+#define MUSIC_FPS 30
+#define MUSIC_HZ 44100
+
 void *music_thread(void *);
 
 /* start animation */
 void animation(global_data * all_data, global_buffer * all_buffers)
 {
-	 //////////////////////////////
+	if (all_data->audio) {
+		def_color();
+	 	fprintf(stderr,"\nINFO: Audio animation started\n");
+		data_t data = {.quit = false,.fd = -1, };
 
-	def_color();
- 	fprintf(stderr,"\nINFO: Audio animation started\n");
-	data_t data = {.quit = false,.fd = -1, };
+		enum { MUSIC, NUM_THREADS_TWO };
+		void *(*thr_functions[])(void *) = { music_thread};
+		pthread_t threads[NUM_THREADS_TWO];
 
-	enum { MUSIC, NUM_THREADS_TWO };
-	void *(*thr_functions[])(void *) = { music_thread};
-	pthread_t threads[NUM_THREADS_TWO];
+		pthread_create(&threads[0], NULL, thr_functions[0], &data);
 
-	pthread_create(&threads[0], NULL, thr_functions[0], &data);
+		long ms1; // microseconds
+		long ms2;
+		struct timespec spec;
 
-	FILE *audioIn;
-	audioIn = fopen("audioAnimation.wav","r");
-	int element;
-	for (int i = 0; i < 50; i++) {
-		element = fgetc(audioIn);
-	}
-	int element1, element2;
-	element1 = fgetc(audioIn);
-	element2 = fgetc(audioIn);
-	while ((element != EOF) && (element1 != EOF) && (element2 != EOF)) {
-		element = 1;
-		for (int i = 0; (i < 44100/30) && (element1 != EOF) && (element2 != EOF); i++) {
-			element1 = fgetc(audioIn);
-			element2 = fgetc(audioIn);
-			element = (element + (element1 + element2)/2)/2;
+		FILE *audioIn;
+		audioIn = fopen("audioAnimation.wav","r");
+		int element;
+		for (int i = 0; i < 50; i++) {
+			element = fgetc(audioIn);
 		}
-		if (element1 == EOF || element2 == EOF) {
-			break;
+		int element1, element2;
+		element1 = fgetc(audioIn);
+		element2 = fgetc(audioIn);
+		long longcount;
+		while ((element != EOF) && (element1 != EOF) && (element2 != EOF)) {
+	    clock_gettime(CLOCK_REALTIME, &spec);
+	    ms1 = round(spec.tv_nsec / 1.0e3); // Convert nanoseconds to microseconds
+			//fprintf(stderr,"\nmicroseconds: %ld\n",ms);
+
+			cpu_compute(all_buffers, all_data);
+			longcount = 0;
+			for (int i = 0; (i < MUSIC_HZ/MUSIC_FPS) && (element1 != EOF) && (element2 != EOF); i++) {
+				element1 = fgetc(audioIn);
+				element2 = fgetc(audioIn);
+				longcount = longcount + (element1 + element2)/2;
+			}
+			if (element1 == EOF || element2 == EOF) {
+				break;
+			}
+			longcount = 1 * (longcount/(MUSIC_HZ/MUSIC_FPS));
+			all_data->number_of_iterations = 5 + longcount*1.15686;
+			all_data->c_real = -1.235 + longcount*0.00471568627;
+			all_data->c_imag = 1.085 - longcount*0.00590196;
+
+			clock_gettime(CLOCK_REALTIME, &spec);
+	    ms2 = round(spec.tv_nsec / 1.0e3); // Convert nanoseconds to microseconds
+			if (ms2 > ms1) {
+				if ((ms2 - ms1) < (1000000/MUSIC_FPS)) {
+					usleep((1000000/MUSIC_FPS) - (ms2 - ms1));
+				}
+				else {
+					//fprintf(stderr,"\ncomputation is slow...\n");
+				}
+			}
+
 		}
-		usleep(9866);
-		all_data->number_of_iterations = 5 + element*1.15686;
-		all_data->c_real = -1.235 + element*0.00421568627;
-		all_data->c_imag = 1.085 - element*0.00590196;
-		cpu_compute(all_buffers, all_data);
+		pthread_cancel(threads[0]);
+		fclose(audioIn);
+
+		green_col();
+		fprintf(stderr,"\nINFO: Animation ended\n");
 	}
-	pthread_cancel(threads[0]);
-	fclose(audioIn);
 
-	green_col();
-	fprintf(stderr,"\nINFO: Animation ended\n");
 
-	///////////////////
-
-	/*for (int i = 0; i < 960; i++) {
+	else {  // audio animation OFF
+		for (int i = 0; i < 960; i++) {
+			cpu_compute(all_buffers, all_data);
+			all_data->c_real = all_data->c_real + 0.0009765625;
+			all_data->c_imag = all_data->c_imag + 0.0009765625;
+		}
 		cpu_compute(all_buffers, all_data);
-		all_data->c_real = all_data->c_real + 0.0009765625;
-		all_data->c_imag = all_data->c_imag + 0.0009765625;
-	}
-	cpu_compute(all_buffers, all_data);
 
-	for (int i = 0; i < 480; i++) {
-		all_data->c_real = all_data->c_real - 0.001953125;
-		all_data->c_imag = all_data->c_imag - 0.001953125;
-		cpu_compute(all_buffers, all_data);
-	}
-	if (all_data->prediction == 10) {
-		for (int i = 0; i < all_data->prediction_10_steps; i++) {
+		for (int i = 0; i < 480; i++) {
+			all_data->c_real = all_data->c_real - 0.001953125;
+			all_data->c_imag = all_data->c_imag - 0.001953125;
 			cpu_compute(all_buffers, all_data);
 		}
+		if (all_data->prediction == 10) {
+			for (int i = 0; i < all_data->prediction_10_steps; i++) {
+				cpu_compute(all_buffers, all_data);
+			}
+		}
+		green_col();
+		fprintf(stderr,"\nINFO: Animation ended\n");
 	}
-	green_col();
-	fprintf(stderr,"\nINFO: Animation ended\n");*/
 }
 
 /* handle keyboard events */

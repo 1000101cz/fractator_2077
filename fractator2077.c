@@ -69,6 +69,7 @@ void init_all_data(global_data * all_data)
 	all_data->prediction_10_steps = 9;
 	all_data->animation_frame = 1;
 	all_data->menuPosition = 0;
+	all_data->audio = 0;
 }
 
 void welcome_message()
@@ -123,7 +124,7 @@ int main(int argc, char *argv[])
 
 	int opt;
 
-	while ((opt = getopt(argc, argv, ":if:lcrpsx")) != -1) {
+	while ((opt = getopt(argc, argv, ":if:lcrpasx")) != -1) {
 		switch (opt) {
 		case 'r':
 			printf("Enter x axis size: ");
@@ -138,6 +139,11 @@ int main(int argc, char *argv[])
 		case 's':
 			printf("Saving PC generated pictures enabled '/tmp'\n");
 			all_data.save_pictures = true;
+			break;
+
+		case 'a':
+			all_data.audio = 1;
+			printf("Audio animation ON\n");
 			break;
 
 		case 'p':

@@ -48,6 +48,8 @@ typedef struct {
 	int animation_frame;
 
 	int menuPosition;
+
+	_Bool audio;
 } global_data;
 
 /* structure containing picture buffers */
