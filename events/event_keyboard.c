@@ -54,29 +54,94 @@ void animation(global_data * all_data, global_buffer * all_buffers)
 		for (int i = 0; i < 50; i++) {
 			element = fgetc(audioIn);
 		}
+
+		_Bool last_min = 1;
+		_Bool last_min2 = 1;
+		int h1,h2;
+		long long frame_volume;
+		long long frame_volume_increm;
+		long long frame_volume_increm2;
+		int amplitudes;
+
 		int element1, element2;
 		element1 = fgetc(audioIn);
 		element2 = fgetc(audioIn);
-		long longcount;
 		while ((element != EOF) && (element1 != EOF) && (element2 != EOF)) {
 	    clock_gettime(CLOCK_REALTIME, &spec);
 	    ms1 = round(spec.tv_nsec / 1.0e3); // Convert nanoseconds to microseconds
 			//fprintf(stderr,"\nmicroseconds: %ld\n",ms);
 
 			cpu_compute(all_buffers, all_data);
-			longcount = 0;
+
+			h1 = 127;
+			h2 = 127;
+			frame_volume = 0;
+			frame_volume_increm = 0;
+			frame_volume_increm2 = 0;
+			amplitudes = 0;
 			for (int i = 0; (i < MUSIC_HZ/MUSIC_FPS) && (element1 != EOF) && (element2 != EOF); i++) {
 				element1 = fgetc(audioIn);
 				element2 = fgetc(audioIn);
-				longcount = longcount + (element1 + element2)/2;
+				if (element1 == EOF || element2 == EOF) {
+					break;
+				}
+				/* element 1 */
+				if (last_min) {
+					if (element1 > h1) {
+						frame_volume_increm = element1 - h1;
+					} else if (element1 < h1) {
+						last_min = 0;
+						frame_volume = frame_volume + frame_volume_increm;
+						amplitudes++;
+						frame_volume_increm = 0;
+						h1 = element1;
+					}
+				} else {
+					if (element1 < h1) {
+						frame_volume_increm = frame_volume_increm + h1 - element1;
+					} else if (element1 > h1) {
+						last_min = 1;
+						frame_volume = frame_volume + frame_volume_increm;
+						amplitudes++;
+						frame_volume_increm = 0;
+						h1 = element1;
+					}
+				}
+
+				/* element 2 */
+				if (last_min2) {
+					if (element2 > h2) {
+						frame_volume_increm2 = fabs(element2 - h2);
+					} else if (element2 < h2) {
+						last_min2 = 0;
+						frame_volume = frame_volume + fabs(frame_volume_increm2);
+						amplitudes++;
+						frame_volume_increm2 = 0;
+						h2 = element2;
+					}
+				} else {
+					if (element2 < h2) {
+						frame_volume_increm2 = frame_volume_increm2 + fabs(h2 - element2);
+					} else if (element2 > h2) {
+						last_min2 = 1;
+						frame_volume = frame_volume + frame_volume_increm2;
+						amplitudes++;
+						frame_volume_increm2 = 0;
+						h2 = element2;
+					}
+				}
 			}
 			if (element1 == EOF || element2 == EOF) {
 				break;
 			}
-			longcount = 1 * (longcount/(MUSIC_HZ/MUSIC_FPS));
-			all_data->number_of_iterations = 5 + longcount*1.15686;
-			all_data->c_real = -1.235 + longcount*0.00471568627;
-			all_data->c_imag = 1.085 - longcount*0.00590196;
+			//printf("\nFrame volume: %lld\nFrame amplitudes: %d\n\n",frame_volume,amplitudes);
+
+			all_data->c_real = -1.0 + frame_volume*frame_volume/120000000000.0;
+			all_data->c_imag = 0.4 - frame_volume/400000.0;
+
+			if (amplitudes != 0) {
+				all_data->number_of_iterations = (40 + 2000000/(amplitudes*amplitudes*amplitudes))%200;
+			}
 
 			clock_gettime(CLOCK_REALTIME, &spec);
 	    ms2 = round(spec.tv_nsec / 1.0e3); // Convert nanoseconds to microseconds

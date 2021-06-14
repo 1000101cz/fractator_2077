@@ -156,7 +156,7 @@ int xwin_init(int w, int h)
 	assert(win == NULL);
 	win =
 	    SDL_CreateWindow("PRG Semester Project", SDL_WINDOWPOS_UNDEFINED,
-			     SDL_WINDOWPOS_UNDEFINED, w, h+50, SDL_WINDOW_SHOWN);
+			     SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);  // h + 50
 	assert(win != NULL);
 	SDL_SetWindowTitle(win, "FRACTATOR 2077");
 	surface = SDL_CreateRGBSurfaceFrom(icon_32x32_bits, 32, 32, 24, 32 * 3, 0xff, 0xff00, 0xff0000, 0x0000);
