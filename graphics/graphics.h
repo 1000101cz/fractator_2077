@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include "../data/global_data.h"
 
+void save_picture(global_data *all_data);
+
 uint8_t getButton(int buttor_number, int position, int subpixel, int menuPosition);
 
 float getT(int k, int number_of_iterations);
@@ -24,23 +26,11 @@ void save_pixel(int position, uint8_t red, uint8_t green, uint8_t blue);
 
 void display_buffer(global_buffer * all_buffers, global_data * all_data);
 
-void create_window(global_data * all_data);
-
-void close_window();
-
 void erase_buffer(global_buffer * all_buffers, global_data * all_data);
 
 int iter_function(int number_of_iterations, float real, float imag, double c_real, double c_imag);
 
 void compute_function(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
-
-void compute_function_predict_10(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
-
-void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
-
-void compute_function_predict_12(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
-
-void compute_function_predict_13(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag);
 
 void cpu_compute(global_buffer * all_buffers, global_data * all_data);
 

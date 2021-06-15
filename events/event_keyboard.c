@@ -23,7 +23,7 @@
 #include "../system/terminal_colors.h"
 #include "../data/global_data.h"
 #include "../graphics/graphics.h"
-#include "../graphics/xwin_sdl.h"
+#include "../graphics/sdl_window.h"
 #include "../animation/animations.h"
 
 
@@ -104,7 +104,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 			all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
 			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
 
-			xwin_resize(all_data, all_buffers->picture_buffer);
+			window_resize(all_data);
 			cpu_compute(all_buffers, all_data);
 			if (all_data->prediction == 10) {
 				for (int i = 1; i < all_data->prediction_10_steps; i++){
@@ -125,7 +125,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
 
 			// close window and create bigger one
-			xwin_resize(all_data, all_buffers->picture_buffer);
+			window_resize(all_data);
 			cpu_compute(all_buffers, all_data);
 			if (all_data->prediction == 10) {
 				for (int i = 1; i < all_data->prediction_10_steps; i++){
@@ -154,7 +154,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
 
 			// close window and create bigger one
-			xwin_resize(all_data, all_buffers->picture_buffer);
+			window_resize(all_data);
 			cpu_compute(all_buffers, all_data);
 			if (all_data->prediction == 10) {
 				for (int i = 1; i < all_data->prediction_10_steps; i++){
@@ -175,7 +175,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
 
 			// close window and create bigger one
-			xwin_resize(all_data, all_buffers->picture_buffer);
+			window_resize(all_data);
 			cpu_compute(all_buffers, all_data);
 			if (all_data->prediction == 10) {
 				for (int i = 1; i < all_data->prediction_10_steps; i++){

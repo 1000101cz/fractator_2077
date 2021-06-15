@@ -3,7 +3,7 @@
  * author:  STEPAN MAROUSEK                   *
  * date:    2021/6/15                         *
  **********************************************/
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -21,7 +21,7 @@
 #include "../system/terminal_colors.h"
 #include "../data/global_data.h"
 #include "../graphics/graphics.h"
-#include "../graphics/xwin_sdl.h"
+#include "../graphics/sdl_window.h"
 #include "animations.h"
 #include "../events/event_keyboard.h"
 

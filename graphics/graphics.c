@@ -8,7 +8,7 @@
 #include "prediction.h"
 #include "../data/global_data.h"
 #include "../system/terminal_colors.h"
-#include "xwin_sdl.h"
+#include "sdl_window.h"
 #include "buttons.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -19,7 +19,23 @@
 
 global_data local_all_data;
 global_buffer local_all_buffers;
-int prediction_10_status = 0;
+
+/* Save without SDL */
+void save_picture(global_data *all_data)
+{
+	if (all_data->save_pictures) {
+		char filenameppm[40];
+		snprintf(filenameppm, 40, "fractal-%d.ppm",all_data->animation_frame);
+		FILE *pictureOutput;
+		pictureOutput = fopen(filenameppm,"w");
+		fprintf(pictureOutput,"P6\n%d %d\n255\n",all_data->width,all_data->height);
+		for (int i = 0; i < 3*all_data->width*(all_data->height); i++) {
+			fputc(local_all_buffers.picture_buffer[i],pictureOutput);
+		}
+		fclose(pictureOutput);
+		all_data->animation_frame++;
+	}
+}
 
 uint8_t getButton(int buttor_number, int position, int subpixel, int menuPosition)
 {
@@ -91,18 +107,7 @@ void display_buffer(global_buffer * all_buffers, global_data * all_data)
 		all_buffers->picture_buffer[3 * i + 1] = getG(t);
 		all_buffers->picture_buffer[3 * i + 2] = getB(t);
 	}
-	xwin_redraw(all_data->width, all_data->height,
-		    all_buffers->picture_buffer);
-}
-
-void create_window(global_data * all_data)
-{
-	xwin_init(all_data->width, all_data->height);
-}
-
-void close_window()
-{
-	xwin_close();
+	window_redraw(all_buffers->picture_buffer);
 }
 
 /* erase all values stored in iterations buffer */
@@ -149,93 +154,6 @@ void compute_function(int cycle_start, int cycle_end, int local_width, int local
 	}
 }
 
-/* increasing prediction */
-void compute_function_predict_10(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
-{
-	int iter;	// this is going to save to iterations_buffer
-	for (int i = prediction_10_status; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
-		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
-		float t = getT(iter,number_of_iterations);
-		save_pixel(i*3, getR(t), getG(t), getB(t));
-	}
-	prediction_10_status++;
-	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
-}
-
-void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
-{
-	int iter;	// this is going to save to iterations_buffer
-	for (int i = 0; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
-		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
-		float t = getT(iter,number_of_iterations);
-		save_pixel(i*3, getR(t), getG(t), getB(t));
-	}
-	prediction_10_status++;
-	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
-}
-
-void compute_function_predict_12(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
-{
-	int iter;	// this is going to save to iterations_buffer
-	uint8_t red, green, blue;
-	int previous = -1;
-	for (int i = 0; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
-		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
-		float t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		int i3 = i*3;
-		save_pixel(i3, red, green, blue);
-		if (previous == iter) {
-			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
-				save_pixel(i3-3*j, red, green, blue);
-			}
-		} else if (i != 0){
-			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
-				save_pixel(i3-3*j, 0, 0, 0);
-			}
-		}
-		previous = iter;
-	}
-	prediction_10_status++;
-	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
-}
-
-void compute_function_predict_13(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
-{
-	int iter;	// this is going to save to iterations_buffer
-	uint8_t red, green, blue;
-	int previous = -1;
-	for (int i = 0; i < local_width * local_height; i=i+local_all_data.prediction_10_steps) {
-		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
-		float t = getT(iter,number_of_iterations);
-		red = getR(t);
-		green = getG(t);
-		blue = getB(t);
-		int i3 = i*3;
-		save_pixel(i3, red, green, blue);
-		if (previous == iter) {
-			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
-				save_pixel(i3-3*j, red, green, blue);
-			}
-			previous = iter;
-		} else if (i != 0){
-			previous = iter;
-			for (int j = 1; j < local_all_data.prediction_10_steps; j++) {
-				iter = iter_function(number_of_iterations, min_real + ((i-j)%local_width)*step_real, max_imag + ((i-j)/local_width)*step_imag, c_real, c_imag);
-				float t = getT(iter,number_of_iterations);
-				red = getR(t);
-				green = getG(t);
-				blue = getB(t);
-				save_pixel(i3-3*j, red, green, blue);
-			}
-		}
-	}
-	prediction_10_status++;
-	prediction_10_status = prediction_10_status%local_all_data.prediction_10_steps;
-}
-
 void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 {
 	local_all_data.width = all_data->width;
@@ -264,31 +182,18 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 	} else if (all_data->prediction == 5) {
 		compute_function_predict_5(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
 	} else if (all_data->prediction == 10) {
-		compute_function_predict_10(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+		compute_function_predict_10(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
 	} else if (all_data->prediction == 11) {
-		compute_function_predict_11(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+		compute_function_predict_11(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
 	} else if (all_data->prediction == 12) {
-		compute_function_predict_12(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+		compute_function_predict_12(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
 	} else if (all_data->prediction == 13) {
-		compute_function_predict_13(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
+		compute_function_predict_13(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
 	}
 
-	if (all_data->save_pictures) {
+	save_picture(all_data);
 
-				/* Save without SDL */
-				char filenameppm[40];
-				snprintf(filenameppm, 40, "fractal-%d.ppm",all_data->animation_frame);
-
-				FILE *pictureOutput;
-				pictureOutput = fopen(filenameppm,"w");
-
-				fprintf(pictureOutput,"P6\n%d %d\n255\n",all_data->width,all_data->height);
-				fwrite(local_all_buffers.picture_buffer, sizeof(uint8_t), all_data->width*all_data->height*3, pictureOutput);
-				fclose(pictureOutput);
-				all_data->animation_frame++;
-	}
-
-	/*for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
+	for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
 		local_all_buffers.picture_buffer[i] = 255;
 		local_all_buffers.picture_buffer[i+1] = 255;
 		local_all_buffers.picture_buffer[i+2] = 255;
@@ -310,11 +215,10 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		local_all_buffers.picture_buffer[commonIndex+1200] = getButton(5,i,0,all_data->menuPosition);
 		local_all_buffers.picture_buffer[commonIndex+1201] = getButton(5,i,1,all_data->menuPosition);
 		local_all_buffers.picture_buffer[commonIndex+1202] = getButton(5,i,2,all_data->menuPosition);
-	}*/
+	}
 	//all_data->menuPosition++;
 	//all_data->menuPosition = all_data->menuPosition % 11;
-	xwin_redraw(all_data->width, all_data->height,
-		    local_all_buffers.picture_buffer);
+	window_redraw(local_all_buffers.picture_buffer);
 
 	/*def_color();
 	fprintf(stderr,"\nCurrent fractal settings:\n  Number of iterations: %d\n  Real: %5f   %5f\n  Imag: %5f  %5f\n  C:    %5f   %5f\n",

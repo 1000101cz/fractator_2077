@@ -21,21 +21,21 @@ def checkIfProcessRunning(processName):
     return False;
 
 if (checkIfProcessRunning('Fractator_2077')):
-	print("Python found running process")
-	picture_num = 1
-	filename = "fractal-%d"%(picture_num)
-	while (checkIfProcessRunning('Fractator_2077') or os.path.isfile(filename+".ppm")):
-		if os.path.isfile(filename+".ppm"):
-			im = Image.open(filename+".ppm")
-			im.save(filename+".png")
-			os.remove(filename+".ppm")
-			picture_num+=1
-			filename = "fractal-%d"%(picture_num)
-		else:
-			time.sleep(0.2)
-
-
+    print("Python found running process")
+    picture_num = 1
+    filename = "fractal-%d"%(picture_num)
+    while (checkIfProcessRunning('Fractator_2077') or os.path.isfile(filename+".ppm")):
+        if os.path.isfile(filename+".ppm"):
+            picture_num+=1
+            filenameNext = "fractal-%d"%(picture_num)
+            if not os.path.isfile(filenameNext+".ppm"):  # Fractator might be writing to file now
+                time.sleep(0.2)
+            im = Image.open(filename+".ppm")
+            im.save(filename+".png")
+            os.remove(filename+".ppm")
+            filename = "fractal-%d"%(picture_num)
+        else:
+            time.sleep(0.2)
 else:
 	print("Python did not found Fractator_2077 process")
-
 print("Python script terminated")

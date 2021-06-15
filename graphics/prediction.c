@@ -7,6 +7,8 @@
 #include "prediction.h"
 #include "graphics.h"
 
+int prediction_10_status = 0;
+
 /* simple prediction */
 void compute_function_predict_1(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
 {
@@ -487,4 +489,90 @@ void compute_function_predict_5(int cycle_start, int cycle_end, int local_width,
 			save_pixel(position - 24*local_width - j*3, red, green, blue);
 		}
 	}
+}
+
+void compute_function_predict_10(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+{
+	int iter;	// this is going to save to iterations_buffer
+	for (int i = prediction_10_status; i < local_width * local_height; i=i+prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		save_pixel(i*3, getR(t), getG(t), getB(t));
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%prediction_10_steps;
+}
+
+void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+{
+	int iter;	// this is going to save to iterations_buffer
+	for (int i = 0; i < local_width * local_height; i=i+prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		save_pixel(i*3, getR(t), getG(t), getB(t));
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%prediction_10_steps;
+}
+
+void compute_function_predict_12(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+{
+	int iter;	// this is going to save to iterations_buffer
+	uint8_t red, green, blue;
+	int previous = -1;
+	for (int i = 0; i < local_width * local_height; i=i+prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		red = getR(t);
+		green = getG(t);
+		blue = getB(t);
+		int i3 = i*3;
+		save_pixel(i3, red, green, blue);
+		if (previous == iter) {
+			for (int j = 1; j < prediction_10_steps; j++) {
+				save_pixel(i3-3*j, red, green, blue);
+			}
+		} else if (i != 0){
+			for (int j = 1; j < prediction_10_steps; j++) {
+				save_pixel(i3-3*j, 0, 0, 0);
+			}
+		}
+		previous = iter;
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%prediction_10_steps;
+}
+
+void compute_function_predict_13(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+{
+	int iter;	// this is going to save to iterations_buffer
+	uint8_t red, green, blue;
+	int previous = -1;
+	for (int i = 0; i < local_width * local_height; i=i+prediction_10_steps) {
+		iter = iter_function(number_of_iterations, min_real + (i%local_width)*step_real, max_imag + (i/local_width)*step_imag, c_real, c_imag);
+		float t = getT(iter,number_of_iterations);
+		red = getR(t);
+		green = getG(t);
+		blue = getB(t);
+		int i3 = i*3;
+		save_pixel(i3, red, green, blue);
+		if (previous == iter) {
+			for (int j = 1; j < prediction_10_steps; j++) {
+				save_pixel(i3-3*j, red, green, blue);
+			}
+			previous = iter;
+		} else if (i != 0){
+			previous = iter;
+			for (int j = 1; j < prediction_10_steps; j++) {
+				iter = iter_function(number_of_iterations, min_real + ((i-j)%local_width)*step_real, max_imag + ((i-j)/local_width)*step_imag, c_real, c_imag);
+				float t = getT(iter,number_of_iterations);
+				red = getR(t);
+				green = getG(t);
+				blue = getB(t);
+				save_pixel(i3-3*j, red, green, blue);
+			}
+		}
+	}
+	prediction_10_status++;
+	prediction_10_status = prediction_10_status%prediction_10_steps;
 }

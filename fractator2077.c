@@ -31,7 +31,7 @@
 #include "events/keyboard_input.h"
 #include "data/global_data.h"
 #include "graphics/graphics.h"
-#include "graphics/xwin_sdl.h"
+#include "graphics/sdl_window.h"
 #include "data/messages.h"
 #include "system/execute.h"
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread };
 	pthread_t threads[NUM_THREADS];
 
-	create_window(&all_data);      // create SDL window
+	window_init(all_data.width, all_data.height);      // create SDL window
 
 	call_termios(0);              // enter raw mode
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 		pthread_join(threads[i], NULL);
 	}
 	call_termios(1);	// restore terminal settings
-	close_window();
+	window_close();
 	return EXIT_SUCCESS;
 }
 
@@ -100,7 +100,6 @@ int main(int argc, char *argv[])
 void *input_thread(void *d)
 {
 	data_t *data = (data_t *) d;
-	xwin_poll_events();
 	event ev = {.source = EV_KEYBOARD };
 	keyboard_input(data, &ev);
 	return NULL;
@@ -110,7 +109,7 @@ void *input_thread(void *d)
 void *sdl_thread(void *d)
 {
 	while(!end_thr) {
-		xwin_poll_events();
+		window_poll_events();
 		sleep(0.001);
 	}
 	return NULL;

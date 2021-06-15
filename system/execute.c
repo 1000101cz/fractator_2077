@@ -84,5 +84,5 @@ void execute_parameters(int argc, char *argv[], global_data *all_data, global_bu
 
 
 	all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
-	all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
+	all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * (all_data->height+50));
 }

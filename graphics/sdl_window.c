@@ -1,12 +1,8 @@
-/*
- * File name: xwin_sdl.c
- * Date:      2015/06/18 14:37
- * Author:    Jan Faigl
- *
- *
- * Modified:  2021/05/16 16:23
- *            Stepan Marousek
- */
+/**********************************************
+ * name:    FRACTATOR 2077                    *
+ * author:  STEPAN MAROUSEK                   *
+ * date:    2021/6/15                         *
+ **********************************************/
 
 #include <assert.h>
 #include <time.h>
@@ -15,10 +11,10 @@
 
 #include <SDL_image.h>
 
-#include "xwin_sdl.h"
+#include "sdl_window.h"
 #include "../data/global_data.h"
 
-static SDL_Window *win = NULL;
+static SDL_Window *win;
 
 SDL_Surface *surface;
 
@@ -149,37 +145,33 @@ static unsigned char icon_32x32_bits[] = {
 	    0, 10, 39
 };
 
-int xwin_init(int w, int h)
+int window_init(int w, int h)
 {
 	int r;
 	r = SDL_Init(SDL_INIT_VIDEO);
-	assert(win == NULL);
 	win =
-	    SDL_CreateWindow("PRG Semester Project", SDL_WINDOWPOS_UNDEFINED,
-			     SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);  // h + 50
-	assert(win != NULL);
+	    SDL_CreateWindow("Fractal", SDL_WINDOWPOS_UNDEFINED,
+			     SDL_WINDOWPOS_UNDEFINED, w, h+50, SDL_WINDOW_SHOWN);  // h + 50
 	SDL_SetWindowTitle(win, "FRACTATOR 2077");
-	surface = SDL_CreateRGBSurfaceFrom(icon_32x32_bits, 32, 32, 24, 32 * 3, 0xff, 0xff00, 0xff0000, 0x0000);
+	surface = SDL_CreateRGBSurfaceFrom(icon_32x32_bits, 32, 32, 24, 96, 0xff, 0xff00, 0xff0000, 0);
 	SDL_SetWindowIcon(win, surface);
 	SDL_FreeSurface(surface);
 	return r;
 }
 
-void xwin_close()
+void window_close()
 {
-	assert(win != NULL);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
 }
 
-void xwin_redraw(int w, int h, unsigned char *img)
+void window_redraw(uint8_t *img)
 {
-	assert(img && win);
 	SDL_Surface *scr = SDL_GetWindowSurface(win);
 	for (int y = 0; y < (scr->h); ++y) {  // h + 50
 		for (int x = 0; x < scr->w; ++x) {
-			const int idx = (y * scr->w + x) * scr->format->BytesPerPixel;
-			Uint8 *px = (Uint8 *) scr->pixels + idx;
+			int idx = (y * scr->w + x) * scr->format->BytesPerPixel;
+			uint8_t *px = (uint8_t *) scr->pixels + idx;
 			*(px + scr->format->Rshift / 8) = *(img++);
 			*(px + scr->format->Gshift / 8) = *(img++);
 			*(px + scr->format->Bshift / 8) = *(img++);
@@ -188,22 +180,13 @@ void xwin_redraw(int w, int h, unsigned char *img)
 	SDL_UpdateWindowSurface(win);
 }
 
-void xwin_poll_events(void)
+void window_poll_events(void)
 {
 	SDL_Event event;
-	while (SDL_PollEvent(&event)) ;
+	while (SDL_PollEvent(&event)) {}
 }
 
-void xwin_resize(global_data * all_data, unsigned char *img)
+void window_resize(global_data * all_data)
 {
-	assert(img && win);
-	SDL_SetWindowSize(win, all_data->width, all_data->height);
+	SDL_SetWindowSize(win, all_data->width, all_data->height+50);
 }
-
-/* save window to png image */
-void xwin_save_image(unsigned char *img)
-{
-	// zbytecne
-}
-
-/* end of xwin_sdl.c */
