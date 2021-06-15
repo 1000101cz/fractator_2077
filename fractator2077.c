@@ -35,15 +35,10 @@
 #include "data/messages.h"
 #include "system/execute.h"
 
-#define MESSAGE_SIZE (sizeof(message))
-#define SERIAL_READ_TIMOUT_MS 500	//timeout for reading from serial port 500
-
 _Bool end_thr = 0;
 
 void *input_thread(void *);
-
 void *sdl_thread(void *);
-
 void *python_thread(void *);
 
 /* main function */
