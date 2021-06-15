@@ -157,11 +157,11 @@ void audio_animation(global_data * all_data, global_buffer * all_buffers)
 		}
 		//printf("\nFrame volume: %lld\nFrame amplitudes: %d\n\n",frame_volume,amplitudes);
 
-		all_data->c_real = -1.0 + frame_volume*frame_volume/120000000000.0;
-		all_data->c_imag = 0.4 - frame_volume/400000.0;
+		all_data->c_real = -1.0 + frame_volume*(MUSIC_FPS/30.0)*frame_volume*(MUSIC_FPS/30.0)/120000000000.0;
+		all_data->c_imag = 0.4 - frame_volume*(MUSIC_FPS/30.0)/400000.0;
 
 		if (amplitudes != 0) {
-			all_data->number_of_iterations = (40 + 2000000/(amplitudes*amplitudes*amplitudes))%200;
+			all_data->number_of_iterations = (40 + 2000000/(int)(amplitudes*(MUSIC_FPS/30.0)*amplitudes*(MUSIC_FPS/30.0)*amplitudes*(MUSIC_FPS/30.0)))%200;
 			if (all_data->number_of_iterations < 40) {
 				all_data->number_of_iterations = 40;
 			}
