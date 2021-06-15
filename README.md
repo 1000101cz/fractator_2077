@@ -14,6 +14,12 @@
 
 *    sox
 
+*    python3 (+ psutil library)
+
+*    python3-pip
+
+`prerequisites.sh` script can be used to install them all
+
 <h2>Run code:</h2>
 
 Type `./Fractator_2077` in terminal.
