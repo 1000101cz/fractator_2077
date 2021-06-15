@@ -48,38 +48,35 @@ int main(int argc, char *argv[])
 	global_data all_data;
 	init_all_data(&all_data);
 
-	welcome_message(all_data.language); // display welcome message
-
 	global_buffer all_buffers;
 
-	data_t data = {.quit = false,.fd = -1, };
+	welcome_message(all_data.language); // display welcome message
 
 	execute_parameters(argc, argv, &all_data, &all_buffers); // handle execution options
 
-	enum { INPUT, SDLTHRD, PYTHONTHREAD, NUM_THREADS };
+	enum { INPUT, SDLTHRD, PYTHONTHREAD, NUM_THREADS };  //create threads
 	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread };
 	pthread_t threads[NUM_THREADS];
 
-	create_window(&all_data);
+	create_window(&all_data);      // create SDL window
 
-	call_termios(0);
+	call_termios(0);              // enter raw mode
 
-	for (int i = 0; i < NUM_THREADS; ++i) {
+	data_t data = {.quit = false,.fd = -1, };
+	for (int i = 0; i < NUM_THREADS; ++i) {    // open threads
 		pthread_create(&threads[i], NULL, thr_functions[i], &data);
 	}
 
 	/* local variables for computation */
 	struct {
 		uint16_t chunk_id;
-		uint16_t nbr_tasks;
-		uint16_t task_id;
 		bool computing;
-	} computation = { 0, 0, 0, false };
+	} computation = { 0, false };
 
 	/* main loop */
 	while (!data.quit) {
 		event ev = queue_pop();
-
+		
 		if (ev.source == EV_KEYBOARD) {
 			event_keyboard_ev(&ev, &data,	// handle keyboard events
 					  &computation.computing,
