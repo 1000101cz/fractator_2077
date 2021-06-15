@@ -28,11 +28,15 @@ You can use these execute options:
 
 *      p - setup pixel prediction
 
+*      a - enable audio animation
+
 Examples:
 
 *    `./Fractator_2077` - (default settings)
 
 *    `./Fractator_2077 -r -i -s -p` - (change picture width, height, prediction settings and save generated pictures)
+
+*    `./Fractator_2077 -a -p` - (enable audio animation and set prediction)
 
 
 <h2>Tips:</h2>
@@ -40,6 +44,8 @@ Examples:
 *    when zooming in to much, displayed picture is corrupted due to *double* data type accuracy
 
 *    for smooth animation, dont set the distance between pixels (in prediction 10) on higher value than 15
+
+*    use prediction (i recommend p12  with distace between pixels set to 9 and default resolution) for audio animation
 
 
 
