@@ -65,7 +65,7 @@ void audio_animation(global_data * all_data, global_buffer * all_buffers)
 	struct timespec spec;
 
 	FILE *audioIn;
-	audioIn = fopen("audioAnimation.wav","r");
+	audioIn = fopen("data/audioAnimation.wav","r");
 	int element;
 	for (int i = 0; i < 50; i++) {
 		element = fgetc(audioIn);
@@ -157,6 +157,9 @@ void audio_animation(global_data * all_data, global_buffer * all_buffers)
 
 		if (amplitudes != 0) {
 			all_data->number_of_iterations = (40 + 2000000/(amplitudes*amplitudes*amplitudes))%200;
+			if (all_data->number_of_iterations < 40) {
+				all_data->number_of_iterations = 40;
+			}
 		}
 
 		clock_gettime(CLOCK_REALTIME, &spec);
@@ -181,6 +184,6 @@ void audio_animation(global_data * all_data, global_buffer * all_buffers)
 /* thread handeling input */
 void *music_thread(void *d)
 {
-	system("play audioAnimation.wav");
+	system("play data/audioAnimation.wav");
 	return NULL;
 }

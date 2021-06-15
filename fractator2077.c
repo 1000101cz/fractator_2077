@@ -9,6 +9,7 @@
 *    -i             set height resolution
 *    -s             enable saving pc generated pictures to /tmp
 *    -p             set pixel prediction
+*    -a             enable audio animation
 *
 * examples:  ./Fractator_2077                      (default settings)
 *            ./Fractator_2077 -i -r -s -p          (change picture width and height and save pc generated pictures)
@@ -43,6 +44,8 @@ void call_termios(int reset);
 void *input_thread(void *);
 
 void *sdl_thread(void *);
+
+void *python_thread(void *);
 
 void init_all_data(global_data * all_data)
 {
@@ -190,9 +193,9 @@ int main(int argc, char *argv[])
 	all_buffers.iterations_buffer = malloc(sizeof(int) * all_data.width * all_data.height);
 	all_buffers.picture_buffer = malloc(3 * sizeof(int) * all_data.width * all_data.height);
 
-	enum { INPUT, SDLTHRD, NUM_THREADS };
-	const char *threads_names[] = { "Input", "SDL" };
-	void *(*thr_functions[])(void *) = { input_thread, sdl_thread };
+	enum { INPUT, SDLTHRD, PYTHONTHREAD, NUM_THREADS };
+	const char *threads_names[] = { "Input", "SDL", "Python"};
+	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread };
 	pthread_t threads[NUM_THREADS];
 
 	create_window(&all_data);
@@ -280,5 +283,11 @@ void *sdl_thread(void *d)
 	return NULL;
 }
 
+/* thread handeling input */
+void *python_thread(void *d)
+{
+	system("python3 python/picture_compress.py");
+	return NULL;
+}
 
 /* end of fractator sem */
