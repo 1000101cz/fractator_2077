@@ -50,6 +50,8 @@ typedef struct {
 	int menuPosition;
 
 	_Bool audio;
+
+	int language;
 } global_data;
 
 /* structure containing picture buffers */
@@ -57,5 +59,7 @@ typedef struct {
 	int *iterations_buffer;	// iterations for each pixel
 	uint8_t *picture_buffer;	// picture (3 positions for each pixel)
 } global_buffer;
+
+void init_all_data(global_data * all_data);
 
 #endif

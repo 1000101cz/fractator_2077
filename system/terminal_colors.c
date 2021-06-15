@@ -5,6 +5,8 @@
  **********************************************/
 
 #include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
 
 #include "terminal_colors.h"
 
@@ -27,4 +29,21 @@ void yellow_col()
 void def_color()
 {
 	fprintf(stderr, "\033[0m");
+}
+
+/* manage terminal settings */
+void call_termios(int reset)
+{
+	static struct termios tio, tioOld;
+	tcgetattr(STDIN_FILENO, &tio);
+
+	if (reset) {
+		tcsetattr(STDIN_FILENO, TCSANOW, &tioOld);
+
+	} else {
+		tioOld = tio;	//backup
+		cfmakeraw(&tio);
+		tio.c_oflag |= OPOST;
+		tcsetattr(STDIN_FILENO, TCSANOW, &tio);
+	}
 }

@@ -16,4 +16,6 @@ void yellow_col();
 
 void def_color();
 
+void call_termios(int reset);
+
 #endif
