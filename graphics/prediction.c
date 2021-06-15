@@ -1,3 +1,9 @@
+/**********************************************
+ * name:    FRACTATOR 2077                    *
+ * author:  STEPAN MAROUSEK                   *
+ * date:    2021/6/15                         *
+ **********************************************/
+
 #include "prediction.h"
 #include "graphics.h"
 

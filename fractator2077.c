@@ -1,6 +1,6 @@
 /**********************************************
  * name:    FRACTATOR 2077                    *
- * author:  S. MAROUSEK                       *
+ * author:  STEPAN MAROUSEK                   *
  * date:    2021/6/15                         *
  **********************************************/
 
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 	/* main loop */
 	while (!data.quit) {
 		event ev = queue_pop();
-		
+
 		if (ev.source == EV_KEYBOARD) {
 			event_keyboard_ev(&ev, &data,	// handle keyboard events
 					  &computation.computing,

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+#**********************************************
+#* name:    FRACTATOR 2077                    *
+#* author:  STEPAN MAROUSEK                   *
+#* date:    2021/6/15                         *
+#**********************************************
+
 import psutil
 import os
 import time
@@ -27,8 +33,8 @@ if (checkIfProcessRunning('Fractator_2077')):
 			filename = "fractal-%d"%(picture_num)
 		else:
 			time.sleep(0.2)
-			
-		
+
+
 else:
 	print("Python did not found Fractator_2077 process")
 

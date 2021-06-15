@@ -1,3 +1,9 @@
+/**********************************************
+ * name:    FRACTATOR 2077                    *
+ * author:  STEPAN MAROUSEK                   *
+ * date:    2021/6/15                         *
+ **********************************************/
+
 #ifndef __EXECUTE_H__
 #define __EXECUTE_H__
 
