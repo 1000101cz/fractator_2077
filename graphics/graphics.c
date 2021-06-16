@@ -194,9 +194,9 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 	save_picture(all_data);
 
 	for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
-		local_all_buffers.picture_buffer[i] = 255;
-		local_all_buffers.picture_buffer[i+1] = 255;
-		local_all_buffers.picture_buffer[i+2] = 255;
+		local_all_buffers.picture_buffer[i] = 0;
+		local_all_buffers.picture_buffer[i+1] = 7;
+		local_all_buffers.picture_buffer[i+2] = 41;
 	}
 	for (int i = 0; i < 5000; i++) {
 		int commonIndex = 3*(all_data->width*all_data->height) + ((i%100)*3 + (i/100)*all_data->width*3);
@@ -216,8 +216,8 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		local_all_buffers.picture_buffer[commonIndex+1201] = getButton(5,i,1,all_data->menuPosition);
 		local_all_buffers.picture_buffer[commonIndex+1202] = getButton(5,i,2,all_data->menuPosition);
 	}
-	//all_data->menuPosition++;
-	//all_data->menuPosition = all_data->menuPosition % 11;
+	all_data->menuPosition++;
+	all_data->menuPosition = all_data->menuPosition % 11;
 	window_redraw(local_all_buffers.picture_buffer);
 
 	/*def_color();
