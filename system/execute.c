@@ -22,7 +22,7 @@ void execute_parameters(int argc, char *argv[], global_data *all_data, global_bu
 
 	int opt;
 
-	while ((opt = getopt(argc, argv, ":if:lcrpasx")) != -1) {
+	while ((opt = getopt(argc, argv, ":if:lcrpalsx")) != -1) {
 		switch (opt) {
 		case 'r':
 			print_enter_x_size(all_data->language);
@@ -60,6 +60,10 @@ void execute_parameters(int argc, char *argv[], global_data *all_data, global_bu
 				}
 			}
 			break;
+
+    case 'l':
+      print_aliasing_setup(all_data->language);
+      scanf("%d", &all_data->aliasing);
 
 		case ':':
 			print_option_needs_value(all_data->language);

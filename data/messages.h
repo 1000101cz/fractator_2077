@@ -27,4 +27,6 @@ void print_option_needs_value(int language);
 
 void print_unknown_argument(int language, char optopt);
 
+void print_aliasing_setup(int language);
+
 #endif

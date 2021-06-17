@@ -6,6 +6,7 @@
 
 #include "graphics.h"
 #include "prediction.h"
+#include "aliasing.h"
 #include "../data/global_data.h"
 #include "../system/terminal_colors.h"
 #include "sdl_window.h"
@@ -19,6 +20,7 @@
 
 global_data local_all_data;
 global_buffer local_all_buffers;
+global_buffer local_all_buffers2;
 
 /* Save without SDL */
 void save_picture(global_data *all_data)
@@ -168,6 +170,8 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 	local_all_buffers.picture_buffer = all_buffers->picture_buffer;
 	local_all_data.prediction_10_steps = all_data->prediction_10_steps;
 
+	local_all_buffers2.picture_buffer = all_buffers->picture_buffer;
+
 	// compute
 	if (all_data->prediction == 0) {
 		compute_function(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
@@ -189,6 +193,10 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 		compute_function_predict_12(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
 	} else if (all_data->prediction == 13) {
 		compute_function_predict_13(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
+	};
+
+	if (all_data->aliasing != 0) {
+		aliasing(all_data, local_all_buffers.picture_buffer, local_all_buffers2.picture_buffer,all_data->aliasing);
 	}
 
 	save_picture(all_data);

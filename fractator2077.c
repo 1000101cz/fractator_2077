@@ -10,6 +10,7 @@
 *    -s             enable saving pc generated pictures to /tmp
 *    -p             set pixel prediction
 *    -a             enable audio animation
+*    -l             set aliasing
 *
 * examples:  ./Fractator_2077                      (default settings)
 *            ./Fractator_2077 -i -r -s -p          (change picture width and height and save pc generated pictures)

@@ -3,7 +3,7 @@
  * author:  STEPAN MAROUSEK                   *
  * date:    2021/6/15                         *
  **********************************************/
- 
+
 #include "global_data.h"
 #include <math.h>
 
@@ -34,4 +34,5 @@ void init_all_data(global_data * all_data)
 	all_data->menuPosition = 0;
 	all_data->audio = 0;
 	all_data->language = 0; // EN
+  all_data->aliasing = 0; // 0 = none, 1 = strongest, ...
 }

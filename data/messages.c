@@ -207,3 +207,17 @@ void print_unknown_argument(int language, char optopt)
 
   }
 }
+
+void print_aliasing_setup(int language)
+{
+  switch (language) {
+    case 0: // EN
+      fprintf(stderr,"Choose aliasing strenght: \n");
+      break;
+
+    case 1: // CZ
+      fprintf(stderr,"Zvolte sílu aliasingu: \n");
+      break;
+
+  }
+}

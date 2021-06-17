@@ -36,6 +36,8 @@ You can use these execute options:
 
 *      a - enable audio animation
 
+*      l - set aliasing
+
 Examples:
 
 *    `./Fractator_2077` - (default settings)

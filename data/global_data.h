@@ -52,6 +52,8 @@ typedef struct {
 	_Bool audio;
 
 	int language;
+
+	int aliasing;
 } global_data;
 
 /* structure containing picture buffers */
