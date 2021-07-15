@@ -56,14 +56,14 @@ int main(int argc, char *argv[])
 	execute_parameters(argc, argv, &all_data, &all_buffers); // handle execution options
 
 	enum { INPUT, SDLTHRD, PYTHONTHREAD, NUM_THREADS };  //create threads
-	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread };
+	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread};
 	pthread_t threads[NUM_THREADS];
 
 	window_init(all_data.width, all_data.height);      // create SDL window
 
 	call_termios(0);              // enter raw mode
 
-	data_t data = {.quit = false,.fd = -1, };
+	data_t data = {.quit = false, .fd = -1};
 	for (int i = 0; i < NUM_THREADS; ++i) {    // open threads
 		pthread_create(&threads[i], NULL, thr_functions[i], &data);
 	}
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	struct {
 		uint16_t chunk_id;
 		bool computing;
-	} computation = { 0, false };
+	} computation = {0, false};
 
 	/* main loop */
 	while (!data.quit) {

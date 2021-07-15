@@ -27,12 +27,12 @@ void save_picture(global_data *all_data)
 {
 	if (all_data->save_pictures) {
 		char filenameppm[40];
-		snprintf(filenameppm, 40, "fractal-%d.ppm",all_data->animation_frame);
+		snprintf(filenameppm, 40, "fractal-%d.ppm", all_data->animation_frame);
 		FILE *pictureOutput;
-		pictureOutput = fopen(filenameppm,"w");
-		fprintf(pictureOutput,"P6\n%d %d\n255\n",all_data->width,all_data->height);
-		for (int i = 0; i < 3*all_data->width*(all_data->height); i++) {
-			fputc(local_all_buffers.picture_buffer[i],pictureOutput);
+		pictureOutput = fopen(filenameppm, "w");
+		fprintf(pictureOutput,"P6\n%d %d\n255\n", all_data->width, all_data->height);
+		for (int i = 0; i < 3 * all_data->width * (all_data->height); i++) {
+			fputc(local_all_buffers.picture_buffer[i], pictureOutput);
 		}
 		fclose(pictureOutput);
 		all_data->animation_frame++;
@@ -44,23 +44,23 @@ uint8_t getButton(int buttor_number, int position, int subpixel, int menuPositio
 	uint8_t outputPixel = 255;
 	switch (buttor_number){
 		case 1:
-			outputPixel = buttonOne(3*position+subpixel, menuPosition);
+			outputPixel = buttonOne(3 * position + subpixel, menuPosition);
 			break;
 
 		case 2:
-			outputPixel = buttonTwo(3*position+subpixel, menuPosition);
+			outputPixel = buttonTwo(3 * position + subpixel, menuPosition);
 			break;
 
 		case 3:
-			outputPixel = buttonThree(3*position+subpixel, menuPosition);
+			outputPixel = buttonThree(3 * position + subpixel, menuPosition);
 			break;
 
 		case 4:
-			outputPixel = buttonFour(3*position+subpixel, menuPosition);
+			outputPixel = buttonFour(3 * position + subpixel, menuPosition);
 			break;
 
 		case 5:
-			outputPixel = buttonFive(3*position+subpixel, menuPosition);
+			outputPixel = buttonFive(3 * position + subpixel, menuPosition);
 			break;
 	}
 	return outputPixel;
@@ -172,60 +172,96 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 
 	local_all_buffers2.picture_buffer = all_buffers->picture_buffer;
 
-	// compute
-	if (all_data->prediction == 0) {
-		compute_function(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
-	} else if (all_data->prediction == 1) {
-		compute_function_predict_1(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
-	} else if (all_data->prediction == 2) {
-		compute_function_predict_2(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
-	} else if (all_data->prediction == 3) {
-		compute_function_predict_3(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
-	} else if (all_data->prediction == 4) {
-		compute_function_predict_4(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
-	} else if (all_data->prediction == 5) {
-		compute_function_predict_5(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag);
-	} else if (all_data->prediction == 10) {
-		compute_function_predict_10(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
-	} else if (all_data->prediction == 11) {
-		compute_function_predict_11(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
-	} else if (all_data->prediction == 12) {
-		compute_function_predict_12(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
-	} else if (all_data->prediction == 13) {
-		compute_function_predict_13(0, local_all_data.width * local_all_data.height, local_all_data.width, local_all_data.height, local_all_data.c_real, local_all_data.c_imag, local_all_data.number_of_iterations, local_all_data.min_real, local_all_data.max_imag, local_all_data.step_real, local_all_data.step_imag, local_all_data.prediction_10_steps);
-	};
+	int    a1 = 0;
+	int    a2 = local_all_data.width * local_all_data.height;
+	int    a3 = local_all_data.width;
+	int    a4 = local_all_data.height;
+	double a5 = local_all_data.c_real;
+	double a6 = local_all_data.c_imag;
+	int    a7 = local_all_data.number_of_iterations;
+	double a8 = local_all_data.min_real;
+	double a9 = local_all_data.max_imag;
+	double a10 = local_all_data.step_real;
+	double a11 = local_all_data.step_imag;
+
+	int a12 = local_all_data.prediction_10_steps;
+
+	// prediction type
+	switch(all_data->prediction) {
+		case 0: // no prediction
+			compute_function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+			break;
+
+		case 1: // simple prediction
+			compute_function_predict_1(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+			break;
+
+		case 2: // points
+			compute_function_predict_2(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+			break;
+
+		case 3: // pentagons
+			compute_function_predict_3(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+			break;
+
+		case 4: // squares
+			compute_function_predict_4(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+			break;
+
+		case 5: // triangles
+			compute_function_predict_5(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+			break;
+
+		case 10:
+			compute_function_predict_10(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+			break;
+
+		case 11:
+			compute_function_predict_11(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+			break;
+
+		case 12:
+			compute_function_predict_12(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+			break;
+
+		case 13:
+			compute_function_predict_13(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+			break;
+	}
 
 	if (all_data->aliasing != 0) {
-		aliasing(all_data, local_all_buffers.picture_buffer, local_all_buffers2.picture_buffer,all_data->aliasing);
+		aliasing(all_data, local_all_buffers.picture_buffer, local_all_buffers2.picture_buffer, all_data->aliasing);
 	}
 
 	save_picture(all_data);
 
-	for (int i = 3*all_data->width*all_data->height; i < 3*(all_data->width*all_data->height + 50 * all_data->width); i=i+3) {
-		local_all_buffers.picture_buffer[i] = 0;
+	for (int i = 3 * all_data->width * all_data->height; i < 3 * (all_data->width*all_data->height + 50 * all_data->width); i = i + 3) {
+		local_all_buffers.picture_buffer[ i ] = 0;
 		local_all_buffers.picture_buffer[i+1] = 7;
 		local_all_buffers.picture_buffer[i+2] = 41;
 	}
 	for (int i = 0; i < 5000; i++) {
-		int commonIndex = 3*(all_data->width*all_data->height) + ((i%100)*3 + (i/100)*all_data->width*3);
-		local_all_buffers.picture_buffer[commonIndex] = getButton(1,i,0,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+1] = getButton(1,i,1,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+2] = getButton(1,i,2,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+300] = getButton(2,i,0,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+301] = getButton(2,i,1,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+302] = getButton(2,i,2,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+600] = getButton(3,i,0,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+601] = getButton(3,i,1,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+602] = getButton(3,i,2,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+900] = getButton(4,i,0,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+901] = getButton(4,i,1,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+902] = getButton(4,i,2,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+1200] = getButton(5,i,0,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+1201] = getButton(5,i,1,all_data->menuPosition);
-		local_all_buffers.picture_buffer[commonIndex+1202] = getButton(5,i,2,all_data->menuPosition);
+		int commonIndex = 3 * (all_data->width*all_data->height) + ((i%100) * 3 + (i/100) * all_data->width * 3);
+		local_all_buffers.picture_buffer[commonIndex       ] = getButton(1, i, 0, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 1   ] = getButton(1, i, 1, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 2   ] = getButton(1, i, 2, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 300 ] = getButton(2, i, 0, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 301 ] = getButton(2, i, 1, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 302 ] = getButton(2, i, 2, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 600 ] = getButton(3, i, 0, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 601 ] = getButton(3, i, 1, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 602 ] = getButton(3, i, 2, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 900 ] = getButton(4, i, 0, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 901 ] = getButton(4, i, 1, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 902 ] = getButton(4, i, 2, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 1200] = getButton(5, i, 0, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 1201] = getButton(5, i, 1, all_data->menuPosition);
+		local_all_buffers.picture_buffer[commonIndex + 1202] = getButton(5, i, 2, all_data->menuPosition);
 	}
-	all_data->menuPosition++;
-	all_data->menuPosition = all_data->menuPosition % 11;
+
+	//all_data->menuPosition++;
+	//all_data->menuPosition = all_data->menuPosition % 11;
+
 	window_redraw(local_all_buffers.picture_buffer);
 
 	/*def_color();
