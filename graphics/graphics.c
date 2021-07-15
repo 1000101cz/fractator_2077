@@ -139,6 +139,81 @@ int iter_function(int number_of_iterations, float real, float imag, double c_rea
 	return j;
 }
 
+void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all_data) {
+	if (upperBool) {
+		for (int i = 0; i < all_data->height - 1; i++) {
+			for (int j = 0; j < all_data->width * 3; j++) {
+				all_buffers->picture_buffer[(all_data->height - 1) * 3 * all_data->width - 3 * all_data->width * i + j] = all_buffers->picture_buffer[(all_data->height - 1) * 3 * all_data->width - 3 * all_data->width * (i + 1) + j];
+			}
+		}
+
+		int iter;
+		float real;
+		float imag = all_data->max_imag;
+		for (int i = 0; i < all_data->width; i++) {
+			real = all_data->min_real + i * all_data->step_real;
+			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
+			float t = getT(iter,all_data->number_of_iterations);
+			save_pixel(i*3, getR(t), getG(t), getB(t));
+		}
+
+	} else {
+		for (int i = 0; i < all_data->height - 1; i++) {
+			for (int j = 0; j < all_data->width * 3; j++) {
+				all_buffers->picture_buffer[i * 3 * all_data->width + j] = all_buffers->picture_buffer[(i + 1) * 3 * all_data->width + j];
+			}
+		}
+
+		int iter;
+		float real;
+		float imag = all_data->min_imag;
+		for (int i = 0; i < all_data->width; i++) {
+			real = all_data->min_real + i * all_data->step_real;
+			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
+			float t = getT(iter,all_data->number_of_iterations);
+			save_pixel(3 * all_data->width * (all_data->height - 1) + i*3, getR(t), getG(t), getB(t));
+		}
+	}
+	window_redraw(all_buffers->picture_buffer);
+}
+
+void compute_column(bool leftBool, global_buffer * all_buffers, global_data * all_data) {
+	if (leftBool) {
+		for (int i = 0; i < 3 * (all_data->width - 1); i++) {
+			for (int j = 0; j < all_data->height; j++) {
+				all_buffers->picture_buffer[(all_data->width - 1) * 3 - i + 3 * all_data->width * j] = all_buffers->picture_buffer[(all_data->width - 1) * 3 - i - 3 + 3 * all_data->width * j];
+			}
+		}
+
+		int iter;
+		float imag;
+		float real = all_data->min_real;
+		for (int i = 0; i < all_data->height; i++) {
+			imag = all_data->max_imag + i * all_data->step_imag;
+			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
+			float t = getT(iter,all_data->number_of_iterations);
+			save_pixel(i*3*all_data->width, getR(t), getG(t), getB(t));
+		}
+	} else {
+		for (int i = 0; i < 3 * (all_data->width - 1); i++) {
+			for (int j = 0; j < all_data->height; j++) {
+				all_buffers->picture_buffer[i + 3 * all_data->width * j] = all_buffers->picture_buffer[i + 3 + 3 * all_data->width * j];
+			}
+		}
+
+		int iter;
+		float imag;
+		float real = all_data->max_real;
+		for (int i = 0; i < all_data->height; i++) {
+			imag = all_data->max_imag + i * all_data->step_imag;
+			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
+			float t = getT(iter,all_data->number_of_iterations);
+			save_pixel(i*3*all_data->width + 3 * (all_data->width - 1), getR(t), getG(t), getB(t));
+		}
+	}
+	window_redraw(all_buffers->picture_buffer);
+}
+
 /* no prediction */
 void compute_function(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
 {

@@ -190,6 +190,10 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_MOVE_UP: // move picture
+		all_data->max_imag = all_data->max_imag - all_data->step_imag;
+		all_data->min_imag = all_data->min_imag - all_data->step_imag;
+		compute_line(1, all_buffers, all_data);
+		/*
 		all_data->max_imag = all_data->max_imag - all_data->step_imag * 45;
 		all_data->min_imag = all_data->min_imag - all_data->step_imag * 45;
 		all_data->current_real = all_data->min_real;
@@ -199,10 +203,14 @@ void event_keyboard_ev(event * ev, data_t * data,
 			for (int i = 1; i < all_data->prediction_10_steps; i++){
 				cpu_compute(all_buffers, all_data);
 			}
-		}
+		}*/
 		break;
 
 	case EV_MOVE_DOWN: // move picture
+		all_data->max_imag = all_data->max_imag + all_data->step_imag;
+		all_data->min_imag = all_data->min_imag + all_data->step_imag;
+		compute_line(0, all_buffers, all_data);
+		/*
 		all_data->max_imag = all_data->max_imag + all_data->step_imag * 45;
 		all_data->min_imag = all_data->min_imag + all_data->step_imag * 45;
 		all_data->current_real = all_data->min_real;
@@ -212,10 +220,14 @@ void event_keyboard_ev(event * ev, data_t * data,
 			for (int i = 1; i < all_data->prediction_10_steps; i++){
 				cpu_compute(all_buffers, all_data);
 			}
-		}
+		}*/
 		break;
 
 	case EV_MOVE_LEFT: // move picture
+		all_data->max_real = all_data->max_real - all_data->step_real;
+		all_data->min_real = all_data->min_real - all_data->step_real;
+		compute_column(1, all_buffers, all_data);
+		/*
 		all_data->max_real = all_data->max_real - all_data->step_real * 45;
 		all_data->min_real = all_data->min_real - all_data->step_real * 45;
 		all_data->current_real = all_data->min_real;
@@ -225,10 +237,14 @@ void event_keyboard_ev(event * ev, data_t * data,
 			for (int i = 1; i < all_data->prediction_10_steps; i++){
 				cpu_compute(all_buffers, all_data);
 			}
-		}
+		}*/
 		break;
 
 	case EV_MOVE_RIGHT: // move picture
+		all_data->max_real = all_data->max_real + all_data->step_real;
+		all_data->min_real = all_data->min_real + all_data->step_real;
+		compute_column(0, all_buffers, all_data);
+		/*
 		all_data->max_real = all_data->max_real + all_data->step_real * 45;
 		all_data->min_real = all_data->min_real + all_data->step_real * 45;
 		all_data->current_real = all_data->min_real;
@@ -238,7 +254,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 			for (int i = 1; i < all_data->prediction_10_steps; i++){
 				cpu_compute(all_buffers, all_data);
 			}
-		}
+		}*/
 		break;
 
 	case EV_INCREASE_ITER: // increase number of iterations
