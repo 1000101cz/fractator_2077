@@ -174,7 +174,6 @@ void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all
 			save_pixel(3 * all_data->width * (all_data->height - 1) + i*3, getR(t), getG(t), getB(t));
 		}
 	}
-	window_redraw(all_buffers->picture_buffer);
 }
 
 void compute_column(bool leftBool, global_buffer * all_buffers, global_data * all_data) {
@@ -211,7 +210,6 @@ void compute_column(bool leftBool, global_buffer * all_buffers, global_data * al
 			save_pixel(i*3*all_data->width + 3 * (all_data->width - 1), getR(t), getG(t), getB(t));
 		}
 	}
-	window_redraw(all_buffers->picture_buffer);
 }
 
 /* no prediction */
