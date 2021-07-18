@@ -31,6 +31,7 @@ void save_picture(global_data *all_data)
 		FILE *pictureOutput;
 		pictureOutput = fopen(filenameppm, "w");
 		fprintf(pictureOutput,"P6\n%d %d\n255\n", all_data->width, all_data->height);
+
 		for (int i = 0; i < 3 * all_data->width * (all_data->height); i++) {
 			fputc(local_all_buffers.picture_buffer[i], pictureOutput);
 		}
@@ -115,17 +116,18 @@ void display_buffer(global_buffer * all_buffers, global_data * all_data)
 /* erase all values stored in iterations buffer */
 void erase_buffer(global_buffer * all_buffers, global_data * all_data)
 {
-
 	for (int i = 0; i < all_data->width * all_data->height; i++) {
 		all_buffers->iterations_buffer[i] = 1;
 	}
 	display_buffer(all_buffers, all_data);
 }
 
+/* return number of iterations for pixel */
 int iter_function(int number_of_iterations, float real, float imag, double c_real, double c_imag)
 {
 	float newreal, newimag;
 	int j = 1;
+
 	for (j = 1; j <= number_of_iterations; j++) {
 		newreal = real * real - imag * imag + c_real;
 		newimag = 2 * real * imag + c_imag;
@@ -139,6 +141,7 @@ int iter_function(int number_of_iterations, float real, float imag, double c_rea
 	return j;
 }
 
+/* compute line of pixels when moving up/down */
 void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all_data) {
 	if (upperBool) {
 		for (int i = 0; i < all_data->height - 1; i++) {
@@ -150,11 +153,12 @@ void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all
 		int iter;
 		float real;
 		float imag = all_data->max_imag;
+
 		for (int i = 0; i < all_data->width; i++) {
 			real = all_data->min_real + i * all_data->step_real;
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
 			float t = getT(iter,all_data->number_of_iterations);
-			save_pixel(i*3, getR(t), getG(t), getB(t));
+			save_pixel(i * 3, getR(t), getG(t), getB(t));
 		}
 
 	} else {
@@ -167,18 +171,20 @@ void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all
 		int iter;
 		float real;
 		float imag = all_data->min_imag;
+
 		for (int i = 0; i < all_data->width; i++) {
 			real = all_data->min_real + i * all_data->step_real;
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
 			float t = getT(iter,all_data->number_of_iterations);
-			save_pixel(3 * all_data->width * (all_data->height - 1) + i*3, getR(t), getG(t), getB(t));
+			save_pixel(3 * all_data->width * (all_data->height - 1) + i * 3, getR(t), getG(t), getB(t));
 		}
 	}
 }
 
+/* compute column of pixels when moving left/right */
 void compute_column(bool leftBool, global_buffer * all_buffers, global_data * all_data) {
 	if (leftBool) {
-		for (int i = 0; i < 3 * (all_data->width - 1); i++) {
+		for (int i = 0; i < 3 * all_data->width; i++) {
 			for (int j = 0; j < all_data->height; j++) {
 				all_buffers->picture_buffer[(all_data->width - 1) * 3 - i + 3 * all_data->width * j] = all_buffers->picture_buffer[(all_data->width - 1) * 3 - i - 3 + 3 * all_data->width * j];
 			}
@@ -187,12 +193,14 @@ void compute_column(bool leftBool, global_buffer * all_buffers, global_data * al
 		int iter;
 		float imag;
 		float real = all_data->min_real;
+
 		for (int i = 0; i < all_data->height; i++) {
 			imag = all_data->max_imag + i * all_data->step_imag;
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
 			float t = getT(iter,all_data->number_of_iterations);
-			save_pixel(i*3*all_data->width, getR(t), getG(t), getB(t));
+			save_pixel(i * 3 * all_data->width, getR(t), getG(t), getB(t));
 		}
+		
 	} else {
 		for (int i = 0; i < 3 * (all_data->width - 1); i++) {
 			for (int j = 0; j < all_data->height; j++) {
@@ -203,11 +211,12 @@ void compute_column(bool leftBool, global_buffer * all_buffers, global_data * al
 		int iter;
 		float imag;
 		float real = all_data->max_real;
+
 		for (int i = 0; i < all_data->height; i++) {
 			imag = all_data->max_imag + i * all_data->step_imag;
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
 			float t = getT(iter,all_data->number_of_iterations);
-			save_pixel(i*3*all_data->width + 3 * (all_data->width - 1), getR(t), getG(t), getB(t));
+			save_pixel(i * 3 * all_data->width + 3 * (all_data->width - 1), getR(t), getG(t), getB(t));
 		}
 	}
 }
@@ -229,6 +238,7 @@ void compute_function(int cycle_start, int cycle_end, int local_width, int local
 	}
 }
 
+/* choose prediction type and display ui buttons */
 void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 {
 	local_all_data.width = all_data->width;
