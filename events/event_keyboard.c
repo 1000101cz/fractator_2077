@@ -96,59 +96,30 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_RESIZE_PLUS: // increase SDL window size
+		all_data->width = all_data->width * (6.0 / 5.0);
+		all_data->height = all_data->height * (6.0 / 5.0);
+		all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
+		all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
 
-		if (all_data->width == 660) {
-			all_data->width = 840;
-			all_data->height = 540;
-			all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
-			all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
+		free(all_buffers->iterations_buffer);
+		free(all_buffers->picture_buffer);
 
-			free(all_buffers->iterations_buffer);
-			free(all_buffers->picture_buffer);
+		all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
+		all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
 
-			all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
-			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
-
-			window_resize(all_data);
-			cpu_compute(all_buffers, all_data);
-			if (all_data->prediction == 10) {
-				for (int i = 1; i < all_data->prediction_10_steps; i++){
-					cpu_compute(all_buffers, all_data);
-				}
+		window_resize(all_data);
+		cpu_compute(all_buffers, all_data);
+		if (all_data->prediction == 10) {
+			for (int i = 1; i < all_data->prediction_10_steps; i++){
+				cpu_compute(all_buffers, all_data);
 			}
-
-		} else if (all_data->width == 480) {	// change step
-			all_data->width = 660;
-			all_data->height = 480;
-			all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
-			all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
-
-			free(all_buffers->iterations_buffer);
-			free(all_buffers->picture_buffer);
-
-			all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
-			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
-
-			// close window and create bigger one
-			window_resize(all_data);
-			cpu_compute(all_buffers, all_data);
-			if (all_data->prediction == 10) {
-				for (int i = 1; i < all_data->prediction_10_steps; i++){
-					cpu_compute(all_buffers, all_data);
-				}
-			}
-
-		} else {
-			yellow_col();
-			fprintf(stderr,
-				"WARN:  Cannot increase size of window\n");
 		}
 		break;
 
 	case EV_RESIZE_MINUS: // decrease SDL window size
-		if (all_data->width == 840) {
-			all_data->width = 660;
-			all_data->height = 480;
+		if ((5.0 / 6.0) * all_data->width > 500) {
+			all_data->width = all_data->width * (5.0 / 6.0);
+			all_data->height = all_data->height * (5.0 / 6.0);
 			all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
 			all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
 
@@ -158,28 +129,6 @@ void event_keyboard_ev(event * ev, data_t * data,
 			all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
 			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
 
-			// close window and create bigger one
-			window_resize(all_data);
-			cpu_compute(all_buffers, all_data);
-			if (all_data->prediction == 10) {
-				for (int i = 1; i < all_data->prediction_10_steps; i++){
-					cpu_compute(all_buffers, all_data);
-				}
-			}
-
-		} else if (all_data->width == 660) {
-			all_data->width = 480;
-			all_data->height = 420;
-			all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
-			all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
-
-			free(all_buffers->iterations_buffer);
-			free(all_buffers->picture_buffer);
-
-			all_buffers->iterations_buffer = malloc(sizeof(int) * all_data->width * all_data->height);
-			all_buffers->picture_buffer = malloc(3 * sizeof(int) * all_data->width * all_data->height);
-
-			// close window and create bigger one
 			window_resize(all_data);
 			cpu_compute(all_buffers, all_data);
 			if (all_data->prediction == 10) {

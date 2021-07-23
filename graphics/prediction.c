@@ -506,6 +506,9 @@ void compute_function_predict_10(int cycle_start, int cycle_end, int local_width
 void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
 {
 	int iter;	// this is going to save to iterations_buffer
+	for (int i = 0; i < local_width * local_height; i++) {
+		save_pixel(i * 3, 0, 0, 0);
+	}
 	for (int i = 0; i < local_width * local_height; i = i + prediction_10_steps) {
 		iter = iter_function(number_of_iterations, min_real + (i%local_width) * step_real, max_imag + (i/local_width) * step_imag, c_real, c_imag);
 		float t = getT(iter,number_of_iterations);
@@ -531,10 +534,6 @@ void compute_function_predict_12(int cycle_start, int cycle_end, int local_width
 		if (previous == iter) {
 			for (int j = 1; j < prediction_10_steps; j++) {
 				save_pixel(i3 - 3 * j, red, green, blue);
-			}
-		} else if (i != 0){
-			for (int j = 1; j < prediction_10_steps; j++) {
-				save_pixel(i3 - 3 * j, 0, 0, 0);
 			}
 		}
 		previous = iter;

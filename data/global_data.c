@@ -9,11 +9,11 @@
 
 void init_all_data(global_data * all_data)
 {
-	all_data->width = 660;
-	all_data->height = 480;
+	all_data->width = 640;
+	all_data->height = 360;
 	all_data->number_of_iterations = 60;
-	all_data->max_real = 1.6;
-	all_data->min_real = -1.6;
+	all_data->max_real = 1.8;
+	all_data->min_real = -1.8;
 	all_data->max_imag = 1.1;
 	all_data->min_imag = -1.1;
 	all_data->c_real = -0.66;
