@@ -46,6 +46,11 @@ void event_keyboard_ev(event * ev, data_t * data,
 		       global_data * all_data, global_buffer * all_buffers)
 {
 
+	double middle_imag;
+	double middle_real;
+	double distance_imag;
+	double distance_real;
+
 	switch (ev->type) {
 	case EV_QUIT: // prepare abort packet
 		free(all_buffers->picture_buffer);
@@ -190,7 +195,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_MOVE_UP: // move picture
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 1; i++) {
 			all_data->max_imag = all_data->max_imag - all_data->step_imag;
 			all_data->min_imag = all_data->min_imag - all_data->step_imag;
 			compute_line(1, all_buffers, all_data);
@@ -199,7 +204,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_MOVE_DOWN: // move picture
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 1; i++) {
 			all_data->max_imag = all_data->max_imag + all_data->step_imag;
 			all_data->min_imag = all_data->min_imag + all_data->step_imag;
 			compute_line(0, all_buffers, all_data);
@@ -208,7 +213,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_MOVE_LEFT: // move picture
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 1; i++) {
 			all_data->max_real = all_data->max_real - all_data->step_real;
 			all_data->min_real = all_data->min_real - all_data->step_real;
 			compute_column(1, all_buffers, all_data);
@@ -217,7 +222,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_MOVE_RIGHT: // move picture
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 1; i++) {
 			all_data->max_real = all_data->max_real + all_data->step_real;
 			all_data->min_real = all_data->min_real + all_data->step_real;
 			compute_column(0, all_buffers, all_data);
@@ -257,12 +262,17 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_CHANGE_2: // zoom out
-		all_data->max_imag = all_data->max_imag * 2;
-		all_data->min_imag = all_data->min_imag * 2;
-		all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
-		all_data->max_real = all_data->max_real * 2;
-		all_data->min_real = all_data->min_real * 2;
-		all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
+		middle_imag = (all_data->max_imag + all_data->min_imag) / 2;
+		middle_real = (all_data->max_real + all_data->min_real) / 2;
+		distance_imag = fabs(all_data->max_imag - middle_imag);
+		distance_real = fabs(all_data->max_real - middle_real);
+
+		all_data->max_imag = middle_imag + distance_imag * 2;
+		all_data->min_imag = middle_imag - distance_imag * 2;
+		all_data->max_real = middle_real + distance_real * 2;
+		all_data->min_real = middle_real - distance_real * 2;
+		all_data->step_imag = - (distance_imag * 4) / all_data->height;
+		all_data->step_real = (distance_real * 4) / all_data->width;
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
@@ -285,12 +295,17 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_CHANGE_4: // zoom in
-		all_data->max_imag = all_data->max_imag * 0.5;
-		all_data->min_imag = all_data->min_imag * 0.5;
-		all_data->step_imag = -(fabs(all_data->max_imag) + fabs(all_data->min_imag)) / all_data->height;
-		all_data->max_real = all_data->max_real * 0.5;
-		all_data->min_real = all_data->min_real * 0.5;
-		all_data->step_real = (fabs(all_data->max_real) + fabs(all_data->min_real)) / all_data->width;
+		middle_imag = (all_data->max_imag + all_data->min_imag) / 2;
+		middle_real = (all_data->max_real + all_data->min_real) / 2;
+		distance_imag = fabs(all_data->max_imag - middle_imag);
+		distance_real = fabs(all_data->max_real - middle_real);
+
+		all_data->max_imag = middle_imag + distance_imag / 2;
+		all_data->min_imag = middle_imag - distance_imag / 2;
+		all_data->max_real = middle_real + distance_real / 2;
+		all_data->min_real = middle_real - distance_real / 2;
+		all_data->step_imag = - distance_imag / all_data->height;
+		all_data->step_real = distance_real / all_data->width;
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);

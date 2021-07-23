@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
 		uint16_t chunk_id;
 		bool computing;
 	} computation = {0, false};
+	cpu_compute(&all_buffers, &all_data);
 
 	/* main loop */
 	while (!data.quit) {
