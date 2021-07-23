@@ -1,3 +1,9 @@
+/**********************************************
+ * name:    FRACTATOR 2077                    *
+ * author:  STEPAN MAROUSEK                   *
+ * date:    2021/07/24                        *
+ **********************************************/
+
 #include "aliasing.h"
 
 void aliasing_horizontal(global_data *all_data, uint8_t *buffer1, uint8_t *buffer2, int strenght)

@@ -1,7 +1,7 @@
 /**********************************************
  * name:    FRACTATOR 2077                    *
  * author:  STEPAN MAROUSEK                   *
- * date:    2021/6/15                         *
+ * date:    2021/07/24                        *
  **********************************************/
 
 #include <stdio.h>
@@ -50,6 +50,7 @@ void event_keyboard_ev(event * ev, data_t * data,
 	double middle_real;
 	double distance_imag;
 	double distance_real;
+	char filenameppm[40];
 
 	switch (ev->type) {
 	case EV_QUIT: // prepare abort packet
@@ -269,7 +270,23 @@ void event_keyboard_ev(event * ev, data_t * data,
 		animation(all_data, all_buffers);
 		break;
 
-	default:
+	case EV_SAVE_IMAGE:
+		snprintf(filenameppm, 40, "fractal-%d.ppm", all_data->animation_frame);
+		FILE *pictureOutput;
+		pictureOutput = fopen(filenameppm, "w");
+		fprintf(pictureOutput,"P6\n%d %d\n255\n", all_data->width, all_data->height);
+
+		for (int i = 0; i < 3 * all_data->width * all_data->height; i++) {
+			fputc(all_buffers->picture_buffer[i], pictureOutput);
+		}
+		fclose(pictureOutput);
+		all_data->animation_frame++;
+		def_color();
+		fprintf(stderr,
+			"\nINFO:  Picture saved\n");
 		break;
-	}
+
+		default:
+			break;
+		}
 }

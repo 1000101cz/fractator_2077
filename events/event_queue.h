@@ -38,7 +38,8 @@ typedef enum {
 	EV_CHANGE_2,
 	EV_CHANGE_3,
 	EV_CHANGE_4,
-	EV_ANIMATION
+	EV_ANIMATION,
+	EV_SAVE_IMAGE
 } event_type;
 
 typedef struct {

@@ -1,6 +1,6 @@
 <h1>Fractator 2077</h1>
 
-*Created by S. Marousek (maroust1) | 2021/06/12*
+*Created by S. Marousek (maroust1) | 2021/07/24*
 
 ![alt text](https://github.com/1000101cz/fractator_2077/blob/main/data/predict_1.png?raw=true "example")
 
@@ -55,7 +55,9 @@ Examples:
 
 *    use prediction (i recommend p12  with distace between pixels set to 9 and default resolution) for audio animation
 
+*    *ffmpeg* can be used to make video animation from saved pictures
 
 
 
-tested on :computer: Debian, Ubuntu, Fedora, Manjaro, Raspbian | (x86_64 and ARM)    |   written in :atom: Atom
+
+tested on :computer: Debian, Ubuntu, Fedora, Manjaro, Raspbian, Arch | (x86_64 and ARM)    |   written in :atom: Atom

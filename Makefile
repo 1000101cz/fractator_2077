@@ -20,3 +20,6 @@ ${OBJS}: %.o: %.c
 
 clean:
 	rm -f ${BINARIES} ${OBJS}
+
+pclean:
+	rm -f *.png *.ppm

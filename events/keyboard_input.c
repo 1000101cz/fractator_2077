@@ -1,7 +1,7 @@
 /**********************************************
  * name:    FRACTATOR 2077                    *
  * author:  STEPAN MAROUSEK                   *
- * date:    2021/6/15                         *
+ * date:    2021/07/24                        *
  **********************************************/
 
 #include <pthread.h>
@@ -93,6 +93,10 @@ void keyboard_input(data_t * data, event * ev)
 
 		case '9':
 			ev->type = EV_INCREASE_ITER;
+			break;
+
+		case '5':
+			ev->type = EV_SAVE_IMAGE;
 			break;
 
 		case 'h':

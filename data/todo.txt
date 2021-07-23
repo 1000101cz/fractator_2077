@@ -1,5 +1,5 @@
-1) use key '5' to save image
-3) save image in .jpg/.png to save memory
+1) gui buttons
+2) save video animation
 
 
 -----------------------------
