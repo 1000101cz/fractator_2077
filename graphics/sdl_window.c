@@ -6,12 +6,13 @@
 
 #include <assert.h>
 #include <time.h>
-
+#include <unistd.h>
 #include <SDL.h>
 
 #include <SDL_image.h>
 
 #include "sdl_window.h"
+#include "intro.h"
 #include "../data/global_data.h"
 
 static SDL_Window *win;
@@ -144,6 +145,40 @@ static unsigned char icon_32x32_bits[] = {
 	    0, 10, 39, 0, 10, 39, 0, 10, 39, 0, 10, 39, 0, 10, 39, 0, 10, 39, 0, 10, 39, 0, 10, 39, 0, 10, 39,
 	    0, 10, 39
 };
+
+int window_intro()
+{
+	int r = SDL_Init(SDL_INIT_VIDEO);
+	win =
+	    SDL_CreateWindow("Fractal", SDL_WINDOWPOS_UNDEFINED,
+			     SDL_WINDOWPOS_UNDEFINED, 640, 360, SDL_WINDOW_SHOWN);
+	SDL_SetWindowTitle(win, " ");
+	surface = SDL_CreateRGBSurfaceFrom(icon_32x32_bits, 32, 32, 24, 96, 0xff, 0xff00, 0xff0000, 0);
+	SDL_SetWindowIcon(win, surface);
+	SDL_FreeSurface(surface);
+
+	// img je v .h souboru
+
+	SDL_Surface *scr = SDL_GetWindowSurface(win);
+	uint8_t *img = intro;
+	for (int y = 0; y < (scr->h); ++y) {  // h + 50
+		for (int x = 0; x < scr->w; ++x) {
+			int idx = (y * scr->w + x) * scr->format->BytesPerPixel;
+			uint8_t *px = (uint8_t *) scr->pixels + idx;
+			*(px + scr->format->Rshift / 8) = *(img++);
+			*(px + scr->format->Gshift / 8) = *(img++);
+			*(px + scr->format->Bshift / 8) = *(img++);
+		}
+	}
+	SDL_UpdateWindowSurface(win);
+
+	sleep(2);
+
+	SDL_DestroyWindow(win);
+	SDL_Quit();
+
+	return r;
+}
 
 int window_init(int w, int h)
 {

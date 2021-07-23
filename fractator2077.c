@@ -59,6 +59,8 @@ int main(int argc, char *argv[])
 	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread};
 	pthread_t threads[NUM_THREADS];
 
+	window_intro();
+
 	window_init(all_data.width, all_data.height);      // create SDL window
 
 	call_termios(0);              // enter raw mode

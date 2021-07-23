@@ -10,6 +10,7 @@
 #include "../data/global_data.h"
 
 int window_init(int w, int h);
+int window_intro();
 void window_close();
 void window_redraw(uint8_t *img);
 void window_poll_events(void);
