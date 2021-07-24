@@ -212,17 +212,17 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_CHANGE_2: // zoom out
-		middle_imag = (all_data->max_imag + all_data->min_imag) / 2;
-		middle_real = (all_data->max_real + all_data->min_real) / 2;
+		middle_imag = (all_data->max_imag + all_data->min_imag) / 2.0;
+		middle_real = (all_data->max_real + all_data->min_real) / 2.0;
 		distance_imag = fabs(all_data->max_imag - middle_imag);
 		distance_real = fabs(all_data->max_real - middle_real);
 
-		all_data->max_imag = middle_imag + distance_imag * 2;
-		all_data->min_imag = middle_imag - distance_imag * 2;
-		all_data->max_real = middle_real + distance_real * 2;
-		all_data->min_real = middle_real - distance_real * 2;
-		all_data->step_imag = - (distance_imag * 4) / all_data->height;
-		all_data->step_real = (distance_real * 4) / all_data->width;
+		all_data->max_imag = middle_imag + distance_imag * (3.0 / 2.0);
+		all_data->min_imag = middle_imag - distance_imag * (3.0 / 2.0);
+		all_data->max_real = middle_real + distance_real * (3.0 / 2.0);
+		all_data->min_real = middle_real - distance_real * (3.0 / 2.0);
+		all_data->step_imag = - (distance_imag * 3.0) / all_data->height;
+		all_data->step_real = (distance_real * 3.0) / all_data->width;
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);
@@ -245,17 +245,17 @@ void event_keyboard_ev(event * ev, data_t * data,
 		break;
 
 	case EV_CHANGE_4: // zoom in
-		middle_imag = (all_data->max_imag + all_data->min_imag) / 2;
-		middle_real = (all_data->max_real + all_data->min_real) / 2;
+		middle_imag = (all_data->max_imag + all_data->min_imag) / 2.0;
+		middle_real = (all_data->max_real + all_data->min_real) / 2.0;
 		distance_imag = fabs(all_data->max_imag - middle_imag);
 		distance_real = fabs(all_data->max_real - middle_real);
 
-		all_data->max_imag = middle_imag + distance_imag / 2;
-		all_data->min_imag = middle_imag - distance_imag / 2;
-		all_data->max_real = middle_real + distance_real / 2;
-		all_data->min_real = middle_real - distance_real / 2;
-		all_data->step_imag = - distance_imag / all_data->height;
-		all_data->step_real = distance_real / all_data->width;
+		all_data->max_imag = middle_imag + distance_imag / (3.0 / 2.0);
+		all_data->min_imag = middle_imag - distance_imag / (3.0 / 2.0);
+		all_data->max_real = middle_real + distance_real / (3.0 / 2.0);
+		all_data->min_real = middle_real - distance_real / (3.0 / 2.0);
+		all_data->step_imag = - (distance_imag * 2.0 / (3.0 / 2.0)) / all_data->height;
+		all_data->step_real = (distance_real * 2.0 / (3.0 / 2.0)) / all_data->width;
 		all_data->current_real = all_data->min_real;
 		all_data->current_imag = all_data->max_imag;
 		cpu_compute(all_buffers, all_data);

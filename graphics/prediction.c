@@ -10,7 +10,7 @@
 int prediction_10_status = 0;
 
 /* simple prediction */
-void compute_function_predict_1(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+void compute_function_predict_1(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag)
 {
 	int iter1;	// this is going to save to iterations_buffer
 	int iter3;
@@ -43,7 +43,7 @@ void compute_function_predict_1(int cycle_start, int cycle_end, int local_width,
 }
 
 /* fast prediction */
-void compute_function_predict_2(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+void compute_function_predict_2(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag)
 {
 	int iter1;	// this is going to save to iterations_buffer
 	int iter2;
@@ -152,7 +152,7 @@ void compute_function_predict_2(int cycle_start, int cycle_end, int local_width,
 }
 
 /* very-fast prediction */
-void compute_function_predict_3(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+void compute_function_predict_3(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag)
 {
 	int iter1;	// this is going to save to iterations_buffer
 	int iter2;
@@ -334,7 +334,7 @@ void compute_function_predict_3(int cycle_start, int cycle_end, int local_width,
 }
 
 /* super-fast prediction */
-void compute_function_predict_4(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+void compute_function_predict_4(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag)
 {
 	int iter1;	// this is going to save to iterations_buffer
 	int iter2;
@@ -404,7 +404,7 @@ void compute_function_predict_4(int cycle_start, int cycle_end, int local_width,
 }
 
 /* ultra-fast prediction */
-void compute_function_predict_5(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+void compute_function_predict_5(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag)
 {
 	int iter1;	// this is going to save to iterations_buffer
 	int iter2;
@@ -491,7 +491,7 @@ void compute_function_predict_5(int cycle_start, int cycle_end, int local_width,
 	}
 }
 
-void compute_function_predict_10(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+void compute_function_predict_10(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag, int prediction_10_steps)
 {
 	int iter;	// this is going to save to iterations_buffer
 	for (int i = prediction_10_status; i < local_width * local_height; i = i + prediction_10_steps) {
@@ -503,7 +503,7 @@ void compute_function_predict_10(int cycle_start, int cycle_end, int local_width
 	prediction_10_status = prediction_10_status%prediction_10_steps;
 }
 
-void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+void compute_function_predict_11(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag, int prediction_10_steps)
 {
 	int iter;	// this is going to save to iterations_buffer
 	for (int i = 0; i < local_width * local_height; i++) {
@@ -518,7 +518,7 @@ void compute_function_predict_11(int cycle_start, int cycle_end, int local_width
 	prediction_10_status = prediction_10_status%prediction_10_steps;
 }
 
-void compute_function_predict_12(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+void compute_function_predict_12(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag, int prediction_10_steps)
 {
 	int iter;	// this is going to save to iterations_buffer
 	uint8_t red, green, blue;
@@ -542,7 +542,7 @@ void compute_function_predict_12(int cycle_start, int cycle_end, int local_width
 	prediction_10_status = prediction_10_status%prediction_10_steps;
 }
 
-void compute_function_predict_13(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag, int prediction_10_steps)
+void compute_function_predict_13(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag, int prediction_10_steps)
 {
 	int iter;	// this is going to save to iterations_buffer
 	uint8_t red, green, blue;

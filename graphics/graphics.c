@@ -67,9 +67,9 @@ uint8_t getButton(int buttor_number, int position, int subpixel, int menuPositio
 	return outputPixel;
 }
 
-float getT(int k, int number_of_iterations)
+long double getT(int k, int number_of_iterations)
 {
-	float t = 0.96875 * k / number_of_iterations;
+	long double t = 0.96875 * k / number_of_iterations;
 	return t;
 }
 
@@ -101,7 +101,7 @@ void save_pixel(int position, uint8_t red, uint8_t green, uint8_t blue)
 /* compute RGB subpixels and display fractal to SDL window */
 void display_buffer(global_buffer * all_buffers, global_data * all_data)
 {
-	float t;
+	long double t;
 
 	for (int i = 0; i < all_data->width * all_data->height; i++) {
 		t = getT(all_buffers->iterations_buffer[i],
@@ -123,9 +123,9 @@ void erase_buffer(global_buffer * all_buffers, global_data * all_data)
 }
 
 /* return number of iterations for pixel */
-int iter_function(int number_of_iterations, float real, float imag, double c_real, double c_imag)
+int iter_function(int number_of_iterations, long double real, long double imag, long double c_real, long double c_imag)
 {
-	float newreal, newimag;
+	long double newreal, newimag;
 	int j = 1;
 
 	for (j = 1; j <= number_of_iterations; j++) {
@@ -154,8 +154,8 @@ void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all
 		}
 
 		int iter;
-		float real = all_data->min_real;
-		float imag = all_data->max_imag;
+		long double real = all_data->min_real;
+		long double imag = all_data->max_imag;
 
 		for (int i = 0; i < all_data->width; i++) {
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
@@ -174,13 +174,13 @@ void compute_line(bool upperBool, global_buffer * all_buffers, global_data * all
 		}
 
 		int iter;
-		float real = all_data->min_real;
-		float imag = all_data->min_imag;
+		long double real = all_data->min_real;
+		long double imag = all_data->min_imag;
 
 		int thirdIndex = 3 * all_data->width * (all_data->height - 1);
 		for (int i = 0; i < all_data->width; i++) {
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
-			float t = getT(iter,all_data->number_of_iterations);
+			long double t = getT(iter,all_data->number_of_iterations);
 			save_pixel(thirdIndex + i * 3, getR(t), getG(t), getB(t));
 			real = real + all_data->step_real;
 		}
@@ -200,12 +200,12 @@ void compute_column(bool leftBool, global_buffer * all_buffers, global_data * al
 		}
 
 		int iter;
-		float imag = all_data->max_imag;
-		float real = all_data->min_real;
+		long double imag = all_data->max_imag;
+		long double real = all_data->min_real;
 
 		for (int i = 0; i < all_data->height; i++) {
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
-			float t = getT(iter,all_data->number_of_iterations);
+			long double t = getT(iter,all_data->number_of_iterations);
 			save_pixel(i * 3 * all_data->width, getR(t), getG(t), getB(t));
 			imag = imag + all_data->step_imag;
 		}
@@ -218,13 +218,13 @@ void compute_column(bool leftBool, global_buffer * all_buffers, global_data * al
 		}
 
 		int iter;
-		float imag = all_data->max_imag;
-		float real = all_data->max_real;
+		long double imag = all_data->max_imag;
+		long double real = all_data->max_real;
 
 		int secondIndex = 3 * (all_data->width - 1);
 		for (int i = 0; i < all_data->height; i++) {
 			iter = iter_function(all_data->number_of_iterations, real, imag, all_data->c_real, all_data->c_imag);
-			float t = getT(iter,all_data->number_of_iterations);
+			long double t = getT(iter,all_data->number_of_iterations);
 			save_pixel(i * 3 * all_data->width + secondIndex, getR(t), getG(t), getB(t));
 			imag = imag + all_data->step_imag;
 		}
@@ -232,18 +232,18 @@ void compute_column(bool leftBool, global_buffer * all_buffers, global_data * al
 }
 
 /* no prediction */
-void compute_function(int cycle_start, int cycle_end, int local_width, int local_height, double c_real, double c_imag, int number_of_iterations, double min_real, double max_imag, double step_real, double step_imag)
+void compute_function(int cycle_start, int cycle_end, int local_width, int local_height, long double c_real, long double c_imag, int number_of_iterations, long double min_real, long double max_imag, long double step_real, long double step_imag)
 {
 	int iter;	// this is going to save to iterations_buffer
 
-	float real;
-	float imag;
+	long double real;
+	long double imag;
 
 	for (int i = 0; i < local_width * local_height; i++) {
 		real = min_real + (i%local_width)*step_real;
 		imag = max_imag + (i/local_width)*step_imag;
 		iter = iter_function(number_of_iterations, real, imag, c_real, c_imag);
-		float t = getT(iter,number_of_iterations);
+		long double t = getT(iter,number_of_iterations);
 		save_pixel(i*3, getR(t), getG(t), getB(t));
 	}
 }
@@ -265,17 +265,17 @@ void cpu_compute(global_buffer * all_buffers, global_data * all_data)
 
 	local_all_buffers2.picture_buffer = all_buffers->picture_buffer;
 
-	int    a1 = 0;
-	int    a2 = local_all_data.width * local_all_data.height;
-	int    a3 = local_all_data.width;
-	int    a4 = local_all_data.height;
-	double a5 = local_all_data.c_real;
-	double a6 = local_all_data.c_imag;
-	int    a7 = local_all_data.number_of_iterations;
-	double a8 = local_all_data.min_real;
-	double a9 = local_all_data.max_imag;
-	double a10 = local_all_data.step_real;
-	double a11 = local_all_data.step_imag;
+	int         a1 = 0;
+	int         a2 = local_all_data.width * local_all_data.height;
+	int         a3 = local_all_data.width;
+	int         a4 = local_all_data.height;
+	long double a5 = local_all_data.c_real;
+	long double a6 = local_all_data.c_imag;
+	int         a7 = local_all_data.number_of_iterations;
+	long double a8 = local_all_data.min_real;
+	long double a9 = local_all_data.max_imag;
+	long double a10 = local_all_data.step_real;
+	long double a11 = local_all_data.step_imag;
 
 	int a12 = local_all_data.prediction_10_steps;
 
