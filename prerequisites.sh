@@ -11,3 +11,5 @@ apt install sox
 apt install python3-pip
 
 pip install psutil
+
+apt install ffmpeg

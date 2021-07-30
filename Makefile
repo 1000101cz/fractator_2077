@@ -23,3 +23,6 @@ clean:
 
 pclean:
 	rm -f *.png *.ppm
+	rm -f saved_pictures/*
+	rmdir saved_pictures
+	rm animation.avi

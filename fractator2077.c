@@ -1,7 +1,7 @@
 /**********************************************
  * name:    FRACTATOR 2077                    *
  * author:  STEPAN MAROUSEK                   *
- * date:    2021/07/24                        *
+ * date:    2021/07/30                        *
  **********************************************/
 
 /* EXECUTE OPTIONS
@@ -41,6 +41,7 @@ _Bool end_thr = 0;
 void *input_thread(void *);
 void *sdl_thread(void *);
 void *python_thread(void *);
+void *python_thread_2(void *);
 
 /* main function */
 int main(int argc, char *argv[])
@@ -55,8 +56,8 @@ int main(int argc, char *argv[])
 
 	execute_parameters(argc, argv, &all_data, &all_buffers); // handle execution options
 
-	enum { INPUT, SDLTHRD, PYTHONTHREAD, NUM_THREADS };  //create threads
-	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread};
+	enum { INPUT, SDLTHRD, PYTHONTHREAD, PYTHONTHREAD2, NUM_THREADS };  //create threads
+	void *(*thr_functions[])(void *) = { input_thread, sdl_thread, python_thread, python_thread_2};
 	pthread_t threads[NUM_THREADS];
 
 	window_intro();
@@ -123,6 +124,13 @@ void *sdl_thread(void *d)
 void *python_thread(void *d)
 {
 	system("python3 python/picture_compress.py");
+	return NULL;
+}
+
+/* thread handeling file conversion */
+void *python_thread_2(void *d)
+{
+	system("python3 python/picture_to_animation.py");
 	return NULL;
 }
 

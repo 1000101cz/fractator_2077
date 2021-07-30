@@ -1,7 +1,7 @@
 /**********************************************
  * name:    FRACTATOR 2077                    *
  * author:  STEPAN MAROUSEK                   *
- * date:    2021/07/24                        *
+ * date:    2021/07/30                        *
  **********************************************/
 
 #include <stdio.h>
@@ -30,6 +30,12 @@
 /* start animation */
 void animation(global_data * all_data, global_buffer * all_buffers)
 {
+	int animation_frame_1 = all_data->animation_frame;
+	if (all_data->save_pictures) {
+		system("mkdir saved_pictures");
+		system("mv *.png saved_pictures/");
+	}
+
 	if (all_data->audio) {
 		audio_animation(all_data, all_buffers);
 	}
@@ -38,6 +44,16 @@ void animation(global_data * all_data, global_buffer * all_buffers)
 	else {  // audio animation OFF
 		pure_animation(all_data, all_buffers);
 	}
+
+	if (all_data->save_pictures) {
+		char filename[] = "make_animation_666.yeah";
+		FILE *make_animation;
+		make_animation = fopen(filename, "w");
+		fprintf(make_animation,"%d\n", animation_frame_1);
+		fprintf(make_animation,"%d\n", (all_data->animation_frame - 1));
+		fclose(make_animation);
+	}
+
 }
 
 /* handle keyboard events */
