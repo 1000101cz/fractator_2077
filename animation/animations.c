@@ -30,16 +30,86 @@
 
 void *music_thread(void *);
 
+void zoom_in(global_data * all_data, double zoom_value)
+{
+	double middle_imag;
+	double middle_real;
+	double distance_imag;
+	double distance_real;
+	
+	middle_imag = (all_data->max_imag + all_data->min_imag) / 2.0;
+	middle_real = (all_data->max_real + all_data->min_real) / 2.0;
+	distance_imag = fabs(all_data->max_imag - middle_imag);
+	distance_real = fabs(all_data->max_real - middle_real);
+
+	all_data->max_imag = middle_imag + distance_imag / (zoom_value / 2.0);
+	all_data->min_imag = middle_imag - distance_imag / (zoom_value / 2.0);
+	all_data->max_real = middle_real + distance_real / (zoom_value / 2.0);
+	all_data->min_real = middle_real - distance_real / (zoom_value / 2.0);
+	all_data->step_imag = - (distance_imag * 2.0 / (zoom_value / 2.0)) / all_data->height;
+	all_data->step_real = (distance_real * 2.0 / (zoom_value / 2.0)) / all_data->width;
+	all_data->current_real = all_data->min_real;
+	all_data->current_imag = all_data->max_imag;
+}
+
+void zoom_out(global_data * all_data, double zoom_value)
+{
+	double middle_imag;
+	double middle_real;
+	double distance_imag;
+	double distance_real;
+
+	middle_imag = (all_data->max_imag + all_data->min_imag) / 2.0;
+	middle_real = (all_data->max_real + all_data->min_real) / 2.0;
+	distance_imag = fabs(all_data->max_imag - middle_imag);
+	distance_real = fabs(all_data->max_real - middle_real);
+
+	all_data->max_imag = middle_imag + distance_imag * (zoom_value / 2.0);
+	all_data->min_imag = middle_imag - distance_imag * (zoom_value / 2.0);
+	all_data->max_real = middle_real + distance_real * (zoom_value / 2.0);
+	all_data->min_real = middle_real - distance_real * (zoom_value / 2.0);
+	all_data->step_imag = - (distance_imag * zoom_value) / all_data->height;
+	all_data->step_real = (distance_real * zoom_value) / all_data->width;
+	all_data->current_real = all_data->min_real;
+	all_data->current_imag = all_data->max_imag;
+}
+
 void pure_animation(global_data * all_data, global_buffer * all_buffers)
 {
-	for (int i = 0; i < 960; i++) {
+	for (int i = 0; i < 480; i++) {
 		cpu_compute(all_buffers, all_data);
 		all_data->c_real = all_data->c_real + 0.0009765625;
 		all_data->c_imag = all_data->c_imag + 0.0009765625;
 	}
 	cpu_compute(all_buffers, all_data);
 
-	for (int i = 0; i < 480; i++) {
+	for (int i = 0; i < 240; i++) {
+		cpu_compute(all_buffers, all_data);
+		all_data->c_real = all_data->c_real + 0.0004565625;
+		all_data->c_imag = all_data->c_imag + 0.0004565625;
+
+		zoom_in(all_data, 2.01);
+
+		if (i%2 == 0) {
+			all_data->number_of_iterations++;
+		}
+	}
+	cpu_compute(all_buffers, all_data);
+
+	for (int i = 0; i < 240; i++) {
+		cpu_compute(all_buffers, all_data);
+		all_data->c_real = all_data->c_real - 0.0004565625;
+		all_data->c_imag = all_data->c_imag - 0.0004565625;
+
+		zoom_out(all_data, 2.01);
+
+		if (i%2 == 0) {
+			all_data->number_of_iterations--;
+		}
+	}
+	cpu_compute(all_buffers, all_data);
+
+	for (int i = 0; i < 240; i++) {
 		all_data->c_real = all_data->c_real - 0.001953125;
 		all_data->c_imag = all_data->c_imag - 0.001953125;
 		cpu_compute(all_buffers, all_data);
